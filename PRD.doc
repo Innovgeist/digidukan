@@ -1,0 +1,755 @@
+PRD — QR Storefront SaaS MVP (Agent-Ready)
+Version: 1.0
+Prepared for: Coding agent implementation
+Product Type: SaaS web app
+Primary Stack: Next.js + TypeScript + PostgreSQL + Prisma + Tailwind + Auth.js/Clerk + Cloudinary
+Architecture Style: Modular monolith
+
+1. PRODUCT OVERVIEW
+1.1 Product Summary
+Build a multi-tenant SaaS web application that allows local business owners to create a public digital storefront accessible via a QR code and public URL.
+Each shop owner can:
+create and manage one or more shops
+configure shop details and branding
+create categories and products/services
+create seasonal/custom collections (e.g. Holi Specials, Diwali Collection)
+publish a public storefront page
+generate and download QR codes for the storefront
+allow customers to browse items and send a cart to WhatsApp
+view basic analytics (paid plan only)
+Super admins can:
+manage all users and shops
+assign plans
+grant manual free trial durations (e.g. 1/2/3 months)
+create shops on behalf of owners
+suspend/activate shops
+impersonate owners with audit logs
+Customers can:
+scan QR or open public URL
+browse shop items
+search/filter by category or collection
+add items to cart
+send cart via WhatsApp to shop owner
+call the shop
+open location link
+share the storefront link
+
+2. MVP GOAL
+2.1 Primary Goal
+Deliver a fully functional MVP that supports:
+owner self-serve onboarding
+admin-assisted onboarding
+catalog management
+public storefront
+QR generation
+WhatsApp cart ordering
+plan gating (Free vs Paid)
+basic analytics
+superadmin controls
+2.2 Target Scale (MVP)
+100–1000 shops
+10k–100k monthly storefront visits / QR scans
+1–500 items per shop depending on plan
+
+3. USER ROLES
+3.1 Roles
+SUPER_ADMIN
+OWNER
+PUBLIC_VISITOR (unauthenticated customer)
+No staff roles in MVP.
+
+4. CORE FUNCTIONAL REQUIREMENTS
+
+5. OWNER FUNCTIONAL REQUIREMENTS
+5.1 Authentication
+Owner must be able to:
+sign up
+log in
+log out
+reset password (if email/password auth)
+access owner dashboard only
+Acceptance Criteria
+Owner cannot access admin routes
+Unauthenticated users cannot access owner dashboard
+Owner sessions persist securely
+
+5.2 Owner Onboarding Wizard
+After first login, owner should be guided through a multi-step onboarding flow.
+Steps
+Basic account confirmation
+Select business type
+F&B
+Retail
+Service
+Mixed
+Create first shop
+shop name
+slug
+phone
+WhatsApp number
+address (optional)
+maps link (optional)
+Branding
+logo (optional)
+cover image (optional)
+primary color
+Add first category
+Add first 1–3 items
+Publish shop
+View/download QR
+Acceptance Criteria
+Owner can skip optional steps (branding, address)
+Owner must complete minimum required fields before publish
+Owner can exit onboarding and resume later
+Onboarding status stored persistently
+
+5.3 Multi-Shop Support
+Owner may have multiple shops in backend from day 1.
+MVP UI
+UI can primarily optimize for one shop, but must allow creating additional shops.
+Acceptance Criteria
+Owner can create at least 1 shop on Free plan
+Shop limit is plan-gated
+Owner cannot access shops belonging to another owner
+
+6. SHOP MANAGEMENT REQUIREMENTS
+6.1 Shop Entity
+Each shop must support:
+Required Fields
+name
+unique slug
+business type
+phone
+WhatsApp number
+Optional Fields
+description
+email
+address
+city
+state
+country (default India for new shops)
+postal code
+Google Maps URL
+logo
+cover image
+primary brand color
+Operational Fields
+status: draft / published / suspended / archived
+open/closed manual toggle
+business hours enabled toggle
+last updated timestamp
+last published timestamp
+Acceptance Criteria
+Slug must be unique globally
+Slug must be URL-safe
+Published shops must have required minimum fields
+Suspended shops should not be publicly accessible
+
+6.2 Shop Settings
+Owner can configure:
+open/closed manual status
+business hours
+offer banner
+contact actions
+storefront visibility settings
+Acceptance Criteria
+If manually closed, storefront shows “Closed”
+If business hours enabled, status can be derived by time (optional MVP enhancement)
+Offer banner should show on public storefront when active
+
+7. CATALOG MANAGEMENT REQUIREMENTS
+
+7.1 Categories
+Categories are structural groupings for items.
+Examples
+Sweets
+Snacks
+Beverages
+Men’s Wear
+Sarees
+Category Fields
+name (required)
+slug (auto-generated)
+description (optional)
+display order
+active/inactive
+Rules
+Category belongs to exactly one shop
+Category names do not need to be globally unique
+Display order controls storefront ordering
+Acceptance Criteria
+Owner can create/edit/delete categories
+Deleting a category with items should either:
+be blocked, OR
+require reassignment (recommended: block in MVP)
+
+7.2 Collections
+Collections are seasonal/custom/marketing groupings.
+Examples
+Holi Specials
+Diwali Collection
+New Arrivals
+Wedding Specials
+Summer Coolers
+Collection Fields
+name (required)
+slug
+description (optional)
+type (SEASONAL, OCCASION, FEATURED, CUSTOM)
+cover image (optional)
+display order
+active/inactive
+starts_at (optional)
+ends_at (optional)
+Rules
+Collection belongs to exactly one shop
+An item may belong to multiple collections
+Collections are independent from categories
+Acceptance Criteria
+Owner can create/edit/delete collections
+Owner can add existing items to collections
+Owner can optionally create new item directly from collection workflow
+Public storefront can display collections separately from categories
+
+7.3 Items
+Items represent products or services.
+Item Types
+PRODUCT
+SERVICE
+Required Fields
+name
+item type
+price
+category (recommended required for product, optional for service)
+shop association
+Optional Fields
+old price
+description
+image
+availability toggle
+featured flag
+bestseller flag
+display order
+dietary type (for F&B only: veg/non-veg/egg/na)
+Business Rules
+Item belongs to one shop
+Item can belong to one primary category
+Item can belong to zero or more collections
+Item must be hidden from storefront if:
+shop unpublished
+item inactive
+item unavailable and configured to hide unavailable items (optional later)
+Default behavior in MVP:
+unavailable items remain visible with “Out of Stock”
+Acceptance Criteria
+Owner can create/edit/delete items
+Owner can upload image
+Owner can toggle availability
+Owner can mark featured/bestseller
+Owner can reorder items manually or via display order field
+
+8. PLAN / SUBSCRIPTION REQUIREMENTS
+8.1 Plan Types (MVP)
+Free Plan
+1 shop
+up to 25 items
+up to 3 categories
+up to 2 collections
+platform branding/watermark enabled
+no advanced analytics
+no PDF export
+limited customization
+Paid Monthly Plan
+higher item limit (e.g. 500)
+more shops (e.g. 3 or configurable)
+unlimited categories
+unlimited collections
+analytics enabled
+PDF export enabled
+no watermark
+custom branding enabled
+Custom Admin Trial / Promo
+Admin can manually grant:
+1 month
+2 months
+3 months
+custom start/end dates
+
+8.2 Plan Enforcement
+Plan limits must be enforced:
+in backend validation
+in API mutations
+in UI (show warnings/upgrade prompts)
+Gated Features
+max number of shops
+max number of items
+max number of categories
+max number of collections
+analytics visibility
+watermark removal
+PDF export availability
+custom branding controls
+Acceptance Criteria
+Owner cannot exceed limits via direct API call
+UI must clearly show plan limits when reached
+Admin can override by changing plan/subscription
+
+9. PUBLIC STOREFRONT REQUIREMENTS
+9.1 Public Route
+Public storefront must be accessible via:
+/s/[slug]
+Example:
+/s/sweet-house-lko
+Acceptance Criteria
+Published shops only
+Suspended/archived shops return not found or suspended state page
+Route is mobile-first optimized
+
+9.2 Public Storefront UI Sections
+Must include:
+Header
+shop logo
+shop name
+description (optional)
+open/closed status
+last updated timestamp
+Banner Area
+offer/announcement banner (if active)
+Actions
+call shop
+WhatsApp inquiry/order
+share link
+map/directions (if available)
+Browsing
+category tabs or sections
+collection highlights
+search bar
+featured items section (optional if items exist)
+Item Cards
+image (if available)
+name
+price
+old price (strikethrough)
+short description (optional)
+availability state
+add to cart
+Footer
+platform watermark on free plan
+optional “Powered by ...”
+Acceptance Criteria
+Must load fast on mobile
+Must work without login
+Must gracefully handle shops with no image
+Must gracefully handle shops with no collections
+Must support up to 500 items without UI breaking
+
+10. CART + WHATSAPP ORDER REQUIREMENTS
+10.1 Cart Behavior
+Public visitor can:
+add items to cart
+adjust quantity
+remove items
+optionally add customer note
+generate WhatsApp message
+Cart State
+client-side only for MVP
+no persistent server-side order storage required in MVP
+
+10.2 WhatsApp Order Message
+On clicking “Order on WhatsApp”, app should open WhatsApp deep link with pre-filled message to shop owner’s WhatsApp number.
+Recommended Message Format
+Hello, I want to order from *{Shop Name}*.
+
+Items:
+1. {Item Name} x {Qty} - ₹{Line Total}
+2. {Item Name} x {Qty} - ₹{Line Total}
+
+Estimated Total: ₹{Cart Total}
+
+Customer Note: {Optional Note}
+
+Please confirm availability.
+
+Rules
+Use URL-encoded message
+If no WhatsApp number is configured, hide or disable order CTA
+WhatsApp CTA should still allow direct inquiry even without cart
+Acceptance Criteria
+Correct quantities and totals shown
+Works on mobile and desktop (opens WhatsApp Web if applicable)
+Handles empty cart by preventing order action
+
+11. QR CODE REQUIREMENTS
+11.1 QR Generation
+Each published shop must have a QR code generated for its public storefront URL.
+Requirements
+Generate QR for /s/[slug]
+Downloadable as PNG
+Optional SVG support if easy
+Regenerate when slug changes
+Acceptance Criteria
+QR scans resolve to correct public storefront
+Owner can download QR
+Admin can also access QR for support if needed
+
+11.2 QR Poster (MVP optional but recommended)
+Create a simple downloadable poster:
+shop name
+QR code
+“Scan to view menu / catalog”
+If time-constrained, this can be Phase 1.5.
+
+12. ANALYTICS REQUIREMENTS
+12.1 Owner-facing Analytics (Paid Plan)
+Track at minimum:
+QR scans
+storefront page views
+WhatsApp clicks
+call clicks
+share clicks
+map clicks
+cart add events
+Optional if simple:
+item views
+top items by clicks
+Rules
+Free plan may show limited or locked analytics
+Paid plan shows counters for last 7 and 30 days
+Acceptance Criteria
+Events recorded reliably
+Analytics dashboard loads quickly
+Owner only sees own shop data
+Admin can see aggregated platform usage
+
+13. SUPER ADMIN REQUIREMENTS
+13.1 Admin Dashboard Capabilities
+Super admin can:
+view all owners
+view all shops
+filter by status / plan / date
+activate/deactivate/suspend shops
+assign plans
+grant free periods
+create owner accounts
+create shops on behalf of owners
+view usage stats
+flag shops/issues
+impersonate owner
+view admin action logs
+
+13.2 Impersonation
+Impersonation is allowed only for super admins.
+Rules
+Must require reason
+Must create audit log entry
+Must show visible banner during impersonation
+Must be time-bound or explicitly ended
+All write actions during impersonation should be traceable
+Acceptance Criteria
+Every impersonation session logged
+Owner identity preserved in logs
+Admin can safely exit impersonation
+
+14. NON-FUNCTIONAL REQUIREMENTS
+14.1 Performance
+Public storefront should be optimized for mobile
+Time to interactive should be low
+Images should be optimized and lazy-loaded
+Public page should support caching/revalidation
+14.2 Security
+RBAC on all protected routes
+Owner cannot access other owner shops
+Admin routes protected
+Validate and sanitize all public-facing text
+Rate-limit analytics endpoint if exposed publicly
+Secure image upload flow
+Prevent slug collisions
+14.3 Reliability
+Public storefront must remain accessible even if owner dashboard is unused
+Invalid/deleted items should not break storefront
+Suspended shops must not expose catalog
+
+15. DATA MODEL (HIGH LEVEL)
+Core Entities
+User
+OwnerProfile
+Shop
+ShopBranding
+ShopHours
+ShopBanner
+Category
+Collection
+Item
+ItemCollection
+QRCodeAsset
+Plan
+ShopSubscription
+AnalyticsEvent
+SupportImpersonationLog
+AdminActionLog
+IssueFlag
+Coding agent should implement relational model using PostgreSQL + Prisma.
+
+16. RECOMMENDED BUSINESS RULES
+16.1 Publish Preconditions
+A shop can be published only if:
+shop name exists
+unique slug exists
+WhatsApp or phone exists (at least one recommended)
+at least 1 category exists
+at least 1 item exists
+active subscription exists (free or paid)
+16.2 Slug Changes
+If slug changes:
+old public URL becomes invalid (MVP)
+QR should be regenerated
+analytics remain linked to shop ID, not slug
+16.3 Deletion Strategy
+Use soft delete or status flags where possible for:
+shops
+items
+categories
+collections
+Avoid hard delete in MVP unless safe.
+
+17. OUT OF SCOPE (DO NOT BUILD IN MVP)
+Do NOT implement:
+full payment gateway integration
+automatic subscription billing
+order management dashboard
+server-side order persistence
+inventory system
+staff roles
+customer login/accounts
+reviews/ratings
+coupon engine
+multilingual item content
+custom domains
+POS integration
+delivery radius logic
+push notifications
+
+18. IMPLEMENTATION ARCHITECTURE (RECOMMENDED)
+18.1 Tech Stack
+Next.js (App Router)
+TypeScript
+Prisma
+PostgreSQL
+Tailwind CSS
+shadcn/ui
+Zod
+React Hook Form
+Auth.js (recommended for lower cost) or Clerk
+Cloudinary for image uploads
+Vercel + Neon Postgres (recommended)
+
+19. SUGGESTED ROUTE STRUCTURE
+Public
+/
+/pricing
+/features
+/s/[slug]
+Auth
+/login
+/signup
+/forgot-password
+Owner
+/dashboard
+/onboarding
+/shops
+/shops/[shopId]
+/shops/[shopId]/settings
+/shops/[shopId]/categories
+/shops/[shopId]/items
+/shops/[shopId]/collections
+/shops/[shopId]/qr
+/shops/[shopId]/analytics
+Admin
+/admin
+/admin/owners
+/admin/shops
+/admin/plans
+/admin/logs
+/admin/flags
+
+20. SUGGESTED API SURFACES
+Public
+GET /api/public/shop/[slug]
+GET /api/public/shop/[slug]/catalog
+POST /api/public/shop/[slug]/track
+Owner
+POST /api/owner/shops
+PATCH /api/owner/shops/:shopId
+POST /api/owner/shops/:shopId/publish
+POST /api/owner/shops/:shopId/categories
+PATCH /api/owner/categories/:categoryId
+DELETE /api/owner/categories/:categoryId
+POST /api/owner/shops/:shopId/items
+PATCH /api/owner/items/:itemId
+DELETE /api/owner/items/:itemId
+POST /api/owner/shops/:shopId/collections
+PATCH /api/owner/collections/:collectionId
+DELETE /api/owner/collections/:collectionId
+POST /api/owner/collections/:collectionId/items
+DELETE /api/owner/collections/:collectionId/items/:itemId
+GET /api/owner/shops/:shopId/analytics
+POST /api/owner/shops/:shopId/qr/regenerate
+Admin
+GET /api/admin/shops
+GET /api/admin/owners
+PATCH /api/admin/shops/:shopId/status
+PATCH /api/admin/shops/:shopId/plan
+POST /api/admin/shops/:shopId/grant-trial
+POST /api/admin/owners
+POST /api/admin/shops
+POST /api/admin/impersonation/start
+POST /api/admin/impersonation/end
+
+21. ACCEPTANCE TEST CHECKLIST (AGENT MUST SATISFY)
+Owner
+Can sign up and log in
+Can complete onboarding
+Can create a shop
+Can edit shop settings
+Can create categories
+Can create items
+Can upload item image
+Can create collections
+Can add items to collections
+Can publish shop
+Can access public URL
+Can download QR
+Can view plan limits
+Can see upgrade restrictions
+Paid owner can see analytics
+Free owner sees locked or limited analytics
+Public Visitor
+Can open public shop page
+Can browse categories
+Can browse collections
+Can search items
+Can add items to cart
+Can update quantities
+Can open WhatsApp with pre-filled cart
+Can call shop
+Can open map link
+Can share page
+Admin
+Can list shops
+Can list owners
+Can create owner account
+Can create shop for owner
+Can assign/change plan
+Can grant manual trial
+Can suspend/reactivate shop
+Can impersonate owner with logs
+Can view basic platform usage
+
+22. BUILD ORDER (MANDATORY IMPLEMENTATION PHASES)
+Phase 1 — Foundation
+project setup
+auth
+role system
+DB schema
+owner/admin route guards
+Phase 2 — Core Owner Flow
+onboarding wizard
+shop CRUD
+branding
+category CRUD
+item CRUD
+image uploads
+Phase 3 — Collections + Public Storefront
+collection CRUD
+item-to-collection assignment
+public storefront /s/[slug]
+search/filter
+featured items
+Phase 4 — Cart + WhatsApp + QR
+cart state
+WhatsApp message generation
+QR generation/download
+publish flow
+Phase 5 — Plans + Analytics
+free/paid plan logic
+feature gating
+analytics event capture
+owner analytics page
+Phase 6 — Super Admin
+admin dashboard
+owner/shop list
+plan assignment
+trial grants
+shop status control
+impersonation + logs
+Phase 7 — Polish
+mobile UX
+validation
+edge cases
+loading states
+empty states
+error handling
+
+23. EDGE CASES (AGENT MUST HANDLE)
+shop has no logo
+shop has no cover image
+shop has no collections
+shop has no map link
+shop has no WhatsApp number (hide cart order CTA)
+shop has phone but no WhatsApp
+item has no image
+item unavailable but still visible
+owner hits free plan item limit
+owner tries direct API call beyond plan limit
+slug collision
+slug changed after QR generation
+suspended shop accessed publicly
+admin impersonation session expires or ends
+category delete with existing items
+collection delete with linked items
+empty cart WhatsApp attempt
+shop not published yet
+multiple shops under same owner
+
+24. RECOMMENDED DEFAULTS
+Default country: India
+Default currency: INR
+Default business type during onboarding: Mixed
+Default storefront language: English
+Default plan on signup: Free
+Default watermark: enabled on Free
+Default item availability: available
+Default shop status after creation: Draft
+
+25. CODING AGENT EXECUTION INSTRUCTION (IMPORTANT)
+The coding agent should treat this as:
+Build Type
+Production-lean MVP
+Clean modular code
+Extensible domain model
+Mobile-first UI
+No microservices
+No overengineering
+Code Quality Expectations
+Type-safe
+Server-side validation with Zod
+Prisma schema with clear relations
+Reusable UI components
+Role-based route protection
+Feature gating enforced server-side
+Minimal but clean admin UI
+Public storefront optimized for performance
+
+26. FINAL IMPLEMENTATION DIRECTIVE
+Definition of “MVP Complete”
+The MVP is complete when:
+An owner can sign up and publish a shop
+The shop has categories, items, and collections
+A customer can browse the public storefront
+A customer can add items to cart and send via WhatsApp
+The owner can download a QR for the storefront
+Plan restrictions work
+Paid analytics are visible
+Super admin can manage shops and plans
+Super admin can create shops on behalf of owners
+Super admin impersonation is logged and functional

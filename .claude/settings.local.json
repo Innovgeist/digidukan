@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && node --version && npm --version)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && echo y | npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" 2>&1)",
+      "Read(//c/Users/ANALYTICSLIV/Desktop/**)",
+      "Bash(npx create-next-app@latest digidukan-tmp --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && npm install next react react-dom 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && npm install --save-dev typescript @types/node @types/react @types/react-dom tailwindcss @tailwindcss/postcss postcss eslint eslint-config-next 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && npm install prisma @prisma/client next-auth@beta @auth/prisma-adapter zod react-hook-form @hookform/resolvers cloudinary qrcode 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && npm install next@15 react@19 react-dom@19 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && npm install prisma@5 @prisma/client@5 next-auth@5 @auth/prisma-adapter@1 zod react-hook-form @hookform/resolvers cloudinary qrcode @types/qrcode tsx 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && npm install prisma@5 @prisma/client@5 next-auth@beta @auth/prisma-adapter@1 zod react-hook-form @hookform/resolvers cloudinary qrcode @types/qrcode tsx 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && npm install bcryptjs @types/bcryptjs 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && npx prisma generate 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && npx tsc --noEmit 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\" && npm run build 2>&1)",
+      "Bash(ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/app/\\\\\\(owner\\\\\\)/shops/)",
+      "Bash(ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/app/\\\\\\(owner\\\\\\)/shops/new/)",
+      "Bash(ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/app/\\\\\\(owner\\\\\\)/shops/\\\\[shopId\\\\]/)",
+      "Bash(ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/app/\\\\\\(owner\\\\\\)/shops/\\\\[shopId\\\\]/settings/)",
+      "Bash(npm run:*)",
+      "Bash(ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/app/\\\\\\(owner\\\\\\)/shops/\\\\[shopId\\\\]/qr/ 2>/dev/null && ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/lib/qr.ts 2>/dev/null && echo \"QR files exist\")",
+      "Bash(ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/app/\\\\\\(admin\\\\\\)/)",
+      "Bash(ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/app/\\\\\\(admin\\\\\\)/admin/ 2>/dev/null || echo \"no admin pages yet\")",
+      "Bash(ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/app/\\\\\\(admin\\\\\\)/admin/shops/ 2>/dev/null && ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/lib/actions/admin.ts 2>/dev/null && echo \"admin files exist\")",
+      "Bash(wc -l \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\\\\app\\\\\\(admin\\)\\\\admin\\\\owners\"/* 2>/dev/null; wc -l \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\\\\app\\\\\\(admin\\)\\\\admin\\\\owners\"/new/* 2>/dev/null; wc -l \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\\\\app\\\\\\(admin\\)\\\\admin\\\\owners\"/[userId]/* 2>/dev/null)",
+      "Bash(npm install:*\\\\)"
+    ]
+  }
+}

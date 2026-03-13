@@ -1,0 +1,341 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  OWNER
+  SUPER_ADMIN
+}
+
+enum BusinessType {
+  RETAIL
+  SERVICE
+  MIXED
+}
+
+enum ShopStatus {
+  DRAFT
+  PUBLISHED
+  SUSPENDED
+  ARCHIVED
+}
+
+enum PlanType {
+  FREE
+  PAID_MONTHLY
+  CUSTOM_TRIAL
+}
+
+enum ItemType {
+  PRODUCT
+  SERVICE
+}
+
+enum DietaryType {
+  VEG
+  NON_VEG
+  EGG
+  NA
+}
+
+enum CollectionType {
+  SEASONAL
+  OCCASION
+  FEATURED
+  CUSTOM
+}
+
+enum AnalyticsEventType {
+  PAGE_VIEW
+  QR_SCAN
+  WHATSAPP_CLICK
+  CALL_CLICK
+  SHARE_CLICK
+  MAP_CLICK
+  CART_ADD
+  ITEM_VIEW
+}
+
+// ─── USER & AUTH ──────────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String?
+  role          Role      @default(OWNER)
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  ownerProfile     OwnerProfile?
+  shops            Shop[]
+  impersonationsBy SupportImpersonationLog[] @relation("AdminUser")
+  impersonationsOf SupportImpersonationLog[] @relation("TargetOwner")
+  adminActions     AdminActionLog[]
+}
+
+model OwnerProfile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  onboardingStep Int      @default(0)
+  onboardingDone Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// ─── SHOP ─────────────────────────────────────────────────────────────────────
+
+model Shop {
+  id                   String       @id @default(cuid())
+  ownerId              String
+  owner                User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name                 String
+  slug                 String       @unique
+  businessType         BusinessType @default(MIXED)
+  phone                String
+  whatsappNumber       String
+  description          String?
+  email                String?
+  address              String?
+  city                 String?
+  state                String?
+  country              String       @default("India")
+  postalCode           String?
+  mapsUrl              String?
+  status               ShopStatus   @default(DRAFT)
+  isOpen               Boolean      @default(true)
+  businessHoursEnabled Boolean      @default(false)
+  lastPublishedAt      DateTime?
+  deletedAt            DateTime?
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  branding        ShopBranding?
+  hours           ShopHours[]
+  banner          ShopBanner?
+  categories      Category[]
+  collections     Collection[]
+  items           Item[]
+  qrCode          QRCodeAsset?
+  subscription    ShopSubscription?
+  analyticsEvents AnalyticsEvent[]
+  issueFlags      IssueFlag[]
+}
+
+model ShopBranding {
+  id            String   @id @default(cuid())
+  shopId        String   @unique
+  shop          Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  logoUrl       String?
+  logoPublicId  String?
+  coverUrl      String?
+  coverPublicId String?
+  primaryColor  String   @default("#3B82F6")
+  updatedAt     DateTime @updatedAt
+}
+
+model ShopHours {
+  id        String  @id @default(cuid())
+  shopId    String
+  shop      Shop    @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  dayOfWeek Int
+  openTime  String
+  closeTime String
+  isClosed  Boolean @default(false)
+}
+
+model ShopBanner {
+  id        String    @id @default(cuid())
+  shopId    String    @unique
+  shop      Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  text      String
+  isActive  Boolean   @default(false)
+  expiresAt DateTime?
+  updatedAt DateTime  @updatedAt
+}
+
+// ─── CATALOG ──────────────────────────────────────────────────────────────────
+
+model Category {
+  id           String    @id @default(cuid())
+  shopId       String
+  shop         Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  name         String
+  slug         String
+  description  String?
+  displayOrder Int       @default(0)
+  isActive     Boolean   @default(true)
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  items        Item[]
+
+  @@unique([shopId, slug])
+}
+
+model Collection {
+  id            String         @id @default(cuid())
+  shopId        String
+  shop          Shop           @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  name          String
+  slug          String
+  description   String?
+  type          CollectionType @default(CUSTOM)
+  coverUrl      String?
+  coverPublicId String?
+  displayOrder  Int            @default(0)
+  isActive      Boolean        @default(true)
+  startsAt      DateTime?
+  endsAt        DateTime?
+  deletedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  itemCollections ItemCollection[]
+
+  @@unique([shopId, slug])
+}
+
+model Item {
+  id            String      @id @default(cuid())
+  shopId        String
+  shop          Shop        @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  categoryId    String?
+  category      Category?   @relation(fields: [categoryId], references: [id])
+  name          String
+  itemType      ItemType    @default(PRODUCT)
+  price         Decimal     @db.Decimal(10, 2)
+  oldPrice      Decimal?    @db.Decimal(10, 2)
+  description   String?
+  imageUrl      String?
+  imagePublicId String?
+  isAvailable   Boolean     @default(true)
+  isFeatured    Boolean     @default(false)
+  isBestseller  Boolean     @default(false)
+  displayOrder  Int         @default(0)
+  dietaryType   DietaryType @default(NA)
+  deletedAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  itemCollections ItemCollection[]
+}
+
+model ItemCollection {
+  id           String     @id @default(cuid())
+  itemId       String
+  item         Item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  addedAt      DateTime   @default(now())
+
+  @@unique([itemId, collectionId])
+}
+
+// ─── QR CODE ──────────────────────────────────────────────────────────────────
+
+model QRCodeAsset {
+  id          String   @id @default(cuid())
+  shopId      String   @unique
+  shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  pngUrl      String
+  svgUrl      String?
+  targetUrl   String
+  generatedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── PLANS & SUBSCRIPTIONS ────────────────────────────────────────────────────
+
+model Plan {
+  id               String   @id @default(cuid())
+  name             String   @unique
+  planType         PlanType
+  maxShops         Int
+  maxItems         Int
+  maxCategories    Int
+  maxCollections   Int
+  analyticsEnabled Boolean  @default(false)
+  pdfExportEnabled Boolean  @default(false)
+  watermarkEnabled Boolean  @default(true)
+  customBranding   Boolean  @default(false)
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+
+  subscriptions ShopSubscription[]
+}
+
+model ShopSubscription {
+  id               String    @id @default(cuid())
+  shopId           String    @unique
+  shop             Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  planId           String
+  plan             Plan      @relation(fields: [planId], references: [id])
+  startsAt         DateTime  @default(now())
+  endsAt           DateTime?
+  isActive         Boolean   @default(true)
+  grantedByAdminId String?
+  notes            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+// ─── ANALYTICS ────────────────────────────────────────────────────────────────
+
+model AnalyticsEvent {
+  id        String             @id @default(cuid())
+  shopId    String
+  shop      Shop               @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  eventType AnalyticsEventType
+  itemId    String?
+  metadata  Json?
+  createdAt DateTime           @default(now())
+
+  @@index([shopId, eventType, createdAt])
+}
+
+// ─── ADMIN & AUDIT ────────────────────────────────────────────────────────────
+
+model SupportImpersonationLog {
+  id            String    @id @default(cuid())
+  adminId       String
+  admin         User      @relation("AdminUser", fields: [adminId], references: [id])
+  targetOwnerId String
+  targetOwner   User      @relation("TargetOwner", fields: [targetOwnerId], references: [id])
+  reason        String
+  startedAt     DateTime  @default(now())
+  endedAt       DateTime?
+  isActive      Boolean   @default(true)
+}
+
+model AdminActionLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  admin      User     @relation(fields: [adminId], references: [id])
+  action     String
+  targetType String
+  targetId   String
+  metadata   Json?
+  createdAt  DateTime @default(now())
+}
+
+model IssueFlag {
+  id        String   @id @default(cuid())
+  shopId    String
+  shop      Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  reason    String
+  flaggedBy String
+  resolved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
