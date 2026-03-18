@@ -44,7 +44,7 @@ export function ShopActions({ shop }: Props) {
           </Link>
         )}
         <Link
-          href={`/shops/${shop.id}/edit`}
+          href={`/shops/${shop.id}/settings`}
           className="text-sm border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50"
         >
           Edit Shop

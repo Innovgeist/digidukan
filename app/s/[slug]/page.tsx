@@ -25,15 +25,17 @@ export default async function StorefrontPage({
       branding: true,
       banner: true,
       subscription: { include: { plan: true } },
+      // Fetch ALL items directly — not nested inside categories —
+      // so uncategorized items are never silently dropped.
+      items: {
+        where: { deletedAt: null },
+        orderBy: { displayOrder: "asc" },
+        include: { category: { select: { id: true, name: true } } },
+      },
+      // Categories are only needed for the tab-filter UI.
       categories: {
         where: { deletedAt: null, isActive: true },
         orderBy: { displayOrder: "asc" },
-        include: {
-          items: {
-            where: { deletedAt: null },
-            orderBy: { displayOrder: "asc" },
-          },
-        },
       },
       collections: {
         where: { deletedAt: null, isActive: true },
@@ -74,23 +76,21 @@ export default async function StorefrontPage({
         shopSlug={slug}
       />
       <StorefrontClient
-        categories={shop.categories.map((c) => ({
-          id: c.id,
-          name: c.name,
-          items: c.items.map((item) => ({
-            id: item.id,
-            name: item.name,
-            price: Number(item.price),
-            oldPrice: item.oldPrice ? Number(item.oldPrice) : null,
-            description: item.description,
-            imageUrl: item.imageUrl,
-            isAvailable: item.isAvailable,
-            isFeatured: item.isFeatured,
-            isBestseller: item.isBestseller,
-            dietaryType: item.dietaryType,
-            categoryName: c.name,
-          })),
+        items={shop.items.map((item) => ({
+          id: item.id,
+          name: item.name,
+          price: Number(item.price),
+          oldPrice: item.oldPrice ? Number(item.oldPrice) : null,
+          description: item.description,
+          imageUrl: item.imageUrl,
+          isAvailable: item.isAvailable,
+          isFeatured: item.isFeatured,
+          isBestseller: item.isBestseller,
+          dietaryType: item.dietaryType,
+          categoryId: item.categoryId,
+          categoryName: item.category?.name ?? "",
         }))}
+        categories={shop.categories.map((c) => ({ id: c.id, name: c.name }))}
         collections={shop.collections.map((col) => ({
           id: col.id,
           name: col.name,

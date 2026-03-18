@@ -18,13 +18,13 @@ export interface Item {
   isFeatured: boolean;
   isBestseller: boolean;
   dietaryType: string;
+  categoryId: string | null;
   categoryName: string;
 }
 
 interface Category {
   id: string;
   name: string;
-  items: Item[];
 }
 
 interface Collection {
@@ -36,6 +36,7 @@ interface Collection {
 }
 
 interface Props {
+  items: Item[];
   categories: Category[];
   collections: Collection[];
   primaryColor: string;
@@ -45,6 +46,7 @@ interface Props {
 }
 
 export function StorefrontClient({
+  items,
   categories,
   collections,
   primaryColor,
@@ -56,9 +58,8 @@ export function StorefrontClient({
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const allItems = categories.flatMap((c) =>
-    c.items.map((item) => ({ ...item, categoryName: c.name }))
-  );
+  // All items come in as a flat list — no risk of missing uncategorized items.
+  const allItems = items;
 
   const filteredItems = allItems.filter((item) => {
     // Collection filter
@@ -66,10 +67,9 @@ export function StorefrontClient({
       const col = collections.find((c) => c.id === selectedCollectionId);
       if (col && !col.itemIds.includes(item.id)) return false;
     }
-    // Category filter
+    // Category filter — match by categoryId, not by scanning nested arrays
     if (selectedCategoryId) {
-      const cat = categories.find((c) => c.id === selectedCategoryId);
-      if (cat && !cat.items.find((i) => i.id === item.id)) return false;
+      if (item.categoryId !== selectedCategoryId) return false;
     }
     // Search filter
     if (searchQuery.trim()) {

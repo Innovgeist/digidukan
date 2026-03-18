@@ -14,45 +14,51 @@ export async function signupAction(data: unknown) {
 
   const { name, email, password } = parsed.data;
 
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    return { error: "An account with this email already exists." };
-  }
+  try {
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      return { error: "An account with this email already exists." };
+    }
 
-  const passwordHash = await bcrypt.hash(password, 12);
+    const passwordHash = await bcrypt.hash(password, 12);
 
-  // Get the FREE plan
-  const freePlan = await prisma.plan.findFirst({
-    where: { planType: "FREE", isActive: true },
-  });
-
-  if (!freePlan) {
-    return { error: "System error: No active plan found. Contact support." };
-  }
-
-  // Create user + owner profile + first shop subscription in a transaction
-  const user = await prisma.$transaction(async (tx) => {
-    const newUser = await tx.user.create({
-      data: {
-        name,
-        email,
-        passwordHash,
-        role: "OWNER",
-      },
+    // Get the FREE plan
+    const freePlan = await prisma.plan.findFirst({
+      where: { planType: "FREE", isActive: true },
     });
 
-    await tx.ownerProfile.create({
-      data: {
-        userId: newUser.id,
-        onboardingStep: 0,
-        onboardingDone: false,
-      },
+    if (!freePlan) {
+      return { error: "System error: No active plan found. Contact support." };
+    }
+
+    // Create user + owner profile + first shop subscription in a transaction
+    const user = await prisma.$transaction(async (tx) => {
+      const newUser = await tx.user.create({
+        data: {
+          name,
+          email,
+          passwordHash,
+          role: "OWNER",
+        },
+      });
+
+      await tx.ownerProfile.create({
+        data: {
+          userId: newUser.id,
+          onboardingStep: 0,
+          onboardingDone: false,
+        },
+      });
+
+      return newUser;
     });
 
-    return newUser;
-  });
-
-  return { success: true, userId: user.id };
+    return { success: true, userId: user.id };
+  } catch (err) {
+    console.error("signupAction error:", err);
+    const message = err instanceof Error ? err.message : String(err);
+    return { error: message };
+  }
 }
 
 export async function loginAction(data: unknown) {

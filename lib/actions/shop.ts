@@ -240,9 +240,14 @@ export async function unpublishShopAction(shopId: string) {
 
 export async function advanceOnboardingStep(step: number) {
   const ownerId = await requireOwner();
-  await prisma.ownerProfile.update({
+  await prisma.ownerProfile.upsert({
     where: { userId: ownerId },
-    data: {
+    update: {
+      onboardingStep: step,
+      onboardingDone: step >= 7,
+    },
+    create: {
+      userId: ownerId,
       onboardingStep: step,
       onboardingDone: step >= 7,
     },

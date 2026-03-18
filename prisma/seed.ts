@@ -44,8 +44,12 @@ async function main() {
   console.log("✅ Plans created:", freePlan.name, "|", paidPlan.name);
 
   // ─── Super Admin ─────────────────────────────────────────────────────────────
-  const adminEmail = "admin@digidukan.com";
-  const adminPassword = await bcrypt.hash("admin123456", 12);
+  const adminEmail = process.env.ADMIN_EMAIL ?? "admin@digidukan.com";
+  const adminRawPassword = process.env.ADMIN_PASSWORD;
+  if (!adminRawPassword) {
+    throw new Error("ADMIN_PASSWORD env var is required for seeding. Set it before running this script.");
+  }
+  const adminPassword = await bcrypt.hash(adminRawPassword, 12);
 
   const admin = await prisma.user.upsert({
     where: { email: adminEmail },
@@ -59,36 +63,6 @@ async function main() {
   });
 
   console.log("✅ Super admin created:", admin.email);
-
-  // ─── Demo Owner (optional, for development) ──────────────────────────────────
-  const demoEmail = "demo@digidukan.com";
-  const demoPassword = await bcrypt.hash("demo123456", 12);
-
-  const demoUser = await prisma.user.upsert({
-    where: { email: demoEmail },
-    update: {},
-    create: {
-      email: demoEmail,
-      name: "Demo Owner",
-      passwordHash: demoPassword,
-      role: "OWNER",
-    },
-  });
-
-  await prisma.ownerProfile.upsert({
-    where: { userId: demoUser.id },
-    update: {},
-    create: {
-      userId: demoUser.id,
-      onboardingStep: 0,
-      onboardingDone: false,
-    },
-  });
-
-  console.log("✅ Demo owner created:", demoUser.email);
-  console.log("\n📋 Seed credentials:");
-  console.log("  Admin:     admin@digidukan.com / admin123456");
-  console.log("  Demo owner: demo@digidukan.com  / demo123456");
   console.log("\n✅ Seeding complete!");
 }
 

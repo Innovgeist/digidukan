@@ -3,11 +3,6 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import fs from "fs";
-import path from "path";
-
-// FeatureFlag is not in the Prisma schema, so we use a JSON file for persistence.
-// The file lives at <project-root>/data/feature-flags.json
 
 export interface FeatureFlag {
   id: string;
@@ -16,35 +11,6 @@ export interface FeatureFlag {
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;
-}
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const FLAGS_FILE = path.join(DATA_DIR, "feature-flags.json");
-
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-}
-
-function readFlags(): FeatureFlag[] {
-  ensureDataDir();
-  if (!fs.existsSync(FLAGS_FILE)) return [];
-  try {
-    const raw = fs.readFileSync(FLAGS_FILE, "utf-8");
-    return JSON.parse(raw) as FeatureFlag[];
-  } catch {
-    return [];
-  }
-}
-
-function writeFlags(flags: FeatureFlag[]) {
-  ensureDataDir();
-  fs.writeFileSync(FLAGS_FILE, JSON.stringify(flags, null, 2), "utf-8");
-}
-
-function generateId(): string {
-  return `flag_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
 async function requireAdmin(): Promise<string> {
@@ -72,13 +38,18 @@ async function logAdminAction(
       },
     });
   } catch {
-    // Non-fatal — flag ops still succeed even if logging fails
+    // Non-fatal
   }
 }
 
 export async function getAllFlagsAction(): Promise<FeatureFlag[]> {
   await requireAdmin();
-  return readFlags();
+  const flags = await prisma.featureFlag.findMany({ orderBy: { createdAt: "asc" } });
+  return flags.map((f) => ({
+    ...f,
+    createdAt: f.createdAt.toISOString(),
+    updatedAt: f.updatedAt.toISOString(),
+  }));
 }
 
 export async function createFlagAction(data: {
@@ -92,33 +63,31 @@ export async function createFlagAction(data: {
     return { error: "Flag key is required." };
   }
 
-  const flags = readFlags();
   const keyNormalized = data.key.trim().toLowerCase().replace(/\s+/g, "_");
 
-  if (flags.some((f) => f.key === keyNormalized)) {
+  const existing = await prisma.featureFlag.findUnique({ where: { key: keyNormalized } });
+  if (existing) {
     return { error: `A flag with key "${keyNormalized}" already exists.` };
   }
 
-  const now = new Date().toISOString();
-  const newFlag: FeatureFlag = {
-    id: generateId(),
-    key: keyNormalized,
-    description: data.description?.trim() ?? "",
-    isEnabled: data.isEnabled,
-    createdAt: now,
-    updatedAt: now,
-  };
+  const flag = await prisma.featureFlag.create({
+    data: {
+      key: keyNormalized,
+      description: data.description?.trim() ?? "",
+      isEnabled: data.isEnabled,
+    },
+  });
 
-  flags.push(newFlag);
-  writeFlags(flags);
-
-  await logAdminAction(adminId, "CREATE_FEATURE_FLAG", newFlag.id, {
-    key: newFlag.key,
-    isEnabled: newFlag.isEnabled,
+  await logAdminAction(adminId, "CREATE_FEATURE_FLAG", flag.id, {
+    key: flag.key,
+    isEnabled: flag.isEnabled,
   });
 
   revalidatePath("/admin/flags");
-  return { success: true, flag: newFlag };
+  return {
+    success: true,
+    flag: { ...flag, createdAt: flag.createdAt.toISOString(), updatedAt: flag.updatedAt.toISOString() },
+  };
 }
 
 export async function toggleFlagAction(
@@ -126,23 +95,26 @@ export async function toggleFlagAction(
 ): Promise<{ success: true; flag: FeatureFlag } | { error: string }> {
   const adminId = await requireAdmin();
 
-  const flags = readFlags();
-  const index = flags.findIndex((f) => f.id === flagId);
-  if (index === -1) {
+  const existing = await prisma.featureFlag.findUnique({ where: { id: flagId } });
+  if (!existing) {
     return { error: "Flag not found." };
   }
 
-  flags[index].isEnabled = !flags[index].isEnabled;
-  flags[index].updatedAt = new Date().toISOString();
-  writeFlags(flags);
+  const flag = await prisma.featureFlag.update({
+    where: { id: flagId },
+    data: { isEnabled: !existing.isEnabled },
+  });
 
   await logAdminAction(adminId, "TOGGLE_FEATURE_FLAG", flagId, {
-    key: flags[index].key,
-    isEnabled: flags[index].isEnabled,
+    key: flag.key,
+    isEnabled: flag.isEnabled,
   });
 
   revalidatePath("/admin/flags");
-  return { success: true, flag: flags[index] };
+  return {
+    success: true,
+    flag: { ...flag, createdAt: flag.createdAt.toISOString(), updatedAt: flag.updatedAt.toISOString() },
+  };
 }
 
 export async function deleteFlagAction(
@@ -150,19 +122,14 @@ export async function deleteFlagAction(
 ): Promise<{ success: true } | { error: string }> {
   const adminId = await requireAdmin();
 
-  const flags = readFlags();
-  const index = flags.findIndex((f) => f.id === flagId);
-  if (index === -1) {
+  const existing = await prisma.featureFlag.findUnique({ where: { id: flagId } });
+  if (!existing) {
     return { error: "Flag not found." };
   }
 
-  const deletedFlag = flags[index];
-  flags.splice(index, 1);
-  writeFlags(flags);
+  await prisma.featureFlag.delete({ where: { id: flagId } });
 
-  await logAdminAction(adminId, "DELETE_FEATURE_FLAG", flagId, {
-    key: deletedFlag.key,
-  });
+  await logAdminAction(adminId, "DELETE_FEATURE_FLAG", flagId, { key: existing.key });
 
   revalidatePath("/admin/flags");
   return { success: true };

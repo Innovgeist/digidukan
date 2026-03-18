@@ -21,9 +21,11 @@ export async function uploadImageAction(formData: FormData, folder: string) {
   if (file.size > MAX_SIZE_BYTES)
     return { error: "File size must be under 5MB" };
 
-  // Check if Cloudinary is configured
   if (!process.env.CLOUDINARY_CLOUD_NAME) {
-    // Dev fallback: return a placeholder URL
+    if (process.env.NODE_ENV === "production") {
+      return { error: "Image uploads are not configured. Please contact support." };
+    }
+    // Dev fallback: return a placeholder so the rest of the form still works
     return {
       success: true,
       url: `https://placehold.co/400x400?text=${encodeURIComponent(file.name)}`,

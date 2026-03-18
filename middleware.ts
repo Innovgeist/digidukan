@@ -42,12 +42,16 @@ export default auth((req) => {
     return NextResponse.next();
   }
 
-  // Owner routes: require authenticated session
+  // Owner routes: require authenticated OWNER session
   if (OWNER_PATHS.some((p) => pathname.startsWith(p))) {
     if (!session?.user) {
       const loginUrl = new URL("/login", req.url);
       loginUrl.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(loginUrl);
+    }
+    // SUPER_ADMIN has no owner profile — send them to admin panel
+    if (session.user.role === "SUPER_ADMIN") {
+      return NextResponse.redirect(new URL("/admin", req.url));
     }
     return NextResponse.next();
   }
