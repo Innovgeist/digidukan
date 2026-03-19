@@ -3,6 +3,7 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname),
+  serverExternalPackages: ["@prisma/client", "bcryptjs"],
   experimental: {
     serverActions: {
       bodySizeLimit: "6mb",

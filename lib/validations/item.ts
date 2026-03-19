@@ -13,7 +13,7 @@ export const CreateItemSchema = z.object({
       (v) => !v || (!isNaN(Number(v)) && Number(v) >= 0),
       "Enter a valid old price"
     ),
-  categoryId: z.string().optional(),
+  categoryId: z.string().optional().or(z.literal("")).transform(v => v === "" ? undefined : v),
   description: z.string().max(500).optional(),
   imageUrl: z.string().url().optional().or(z.literal("")),
   imagePublicId: z.string().optional(),
