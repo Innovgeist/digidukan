@@ -45,7 +45,7 @@ async function main() {
 
   // ─── Super Admin ─────────────────────────────────────────────────────────────
   const adminEmail = process.env.ADMIN_EMAIL ?? "admin@digidukan.com";
-  const adminRawPassword = process.env.ADMIN_PASSWORD;
+  const adminRawPassword = process.env.ADMIN_PASSWORD ?? "Admin@1234";
   if (!adminRawPassword) {
     throw new Error("ADMIN_PASSWORD env var is required for seeding. Set it before running this script.");
   }
