@@ -21,7 +21,7 @@ export default async function CollectionsPage({ params }: { params: Promise<{ sh
   const check = await canAddCollection(shopId);
 
   return (
-    <div className="p-6 max-w-3xl">
+    <div className="p-6 lg:p-8">
       <div className="flex items-center gap-2 mb-1">
         <a href={`/shops/${shopId}`} className="text-sm text-gray-500 hover:text-gray-700">
           &larr; {shop.name}

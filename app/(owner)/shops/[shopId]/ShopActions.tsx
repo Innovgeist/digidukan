@@ -33,19 +33,19 @@ export function ShopActions({ shop }: Props) {
 
   return (
     <div className="flex flex-col items-end gap-2">
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2 justify-end">
         {shop.status === "PUBLISHED" && (
           <Link
             href={`/s/${shop.slug}`}
             target="_blank"
-            className="text-sm border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50"
+            className="text-sm text-gray-700 border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50"
           >
             View Live
           </Link>
         )}
         <Link
           href={`/shops/${shop.id}/settings`}
-          className="text-sm border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50"
+          className="text-sm text-gray-700 border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50"
         >
           Edit Shop
         </Link>

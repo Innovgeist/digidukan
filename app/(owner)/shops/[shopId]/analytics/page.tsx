@@ -27,7 +27,7 @@ export default async function AnalyticsPage({
 
   if (!analyticsEnabled) {
     return (
-      <div className="p-6 max-w-3xl">
+      <div className="p-6 lg:p-8">
         <Link href={`/shops/${shopId}`} className="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block">
           ← {shop.name}
         </Link>
@@ -76,7 +76,7 @@ export default async function AnalyticsPage({
   const totalViews30d = getCount(events30d, "PAGE_VIEW");
 
   return (
-    <div className="p-6 max-w-3xl">
+    <div className="p-6 lg:p-8">
       <Link href={`/shops/${shopId}`} className="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block">
         ← {shop.name}
       </Link>

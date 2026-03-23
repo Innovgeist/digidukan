@@ -2,7 +2,16 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
+import {
+  ShoppingBag,
+  FolderOpen,
+  Sparkles,
+  Settings,
+  QrCode,
+  BarChart3,
+} from "lucide-react";
 import { ShopActions } from "./ShopActions";
+import { StatusBadge } from "@/components/shared/StatusBadge";
 
 export default async function ShopOverviewPage({ params }: { params: Promise<{ shopId: string }> }) {
   const { shopId } = await params;
@@ -28,78 +37,63 @@ export default async function ShopOverviewPage({ params }: { params: Promise<{ s
 
   const plan = shop.subscription?.plan;
 
+  const navCards = [
+    { href: `/shops/${shopId}/items`, title: "Items", desc: "Manage your product/service catalog", icon: ShoppingBag, color: "text-blue-600 bg-blue-50" },
+    { href: `/shops/${shopId}/categories`, title: "Categories", desc: "Organise items into categories", icon: FolderOpen, color: "text-amber-600 bg-amber-50" },
+    { href: `/shops/${shopId}/collections`, title: "Collections", desc: "Seasonal & featured collections", icon: Sparkles, color: "text-violet-600 bg-violet-50" },
+    { href: `/shops/${shopId}/settings`, title: "Settings", desc: "Hours, banner, contact info", icon: Settings, color: "text-gray-600 bg-gray-100" },
+    { href: `/shops/${shopId}/qr`, title: "QR Code", desc: "Download QR for your storefront", icon: QrCode, color: "text-green-600 bg-green-50" },
+    { href: `/shops/${shopId}/analytics`, title: "Analytics", desc: plan?.analyticsEnabled ? "View your shop analytics" : "Upgrade for analytics", icon: BarChart3, color: "text-rose-600 bg-rose-50" },
+  ];
+
   return (
-    <div className="p-6 max-w-4xl">
+    <div className="p-6 lg:p-8">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-2xl font-bold text-gray-900">{shop.name}</h1>
-            <StatusBadge status={shop.status} />
-          </div>
-          <p className="text-sm text-gray-500">/s/{shop.slug} · {plan?.name ?? "Free"} plan</p>
+      <div className="mb-6">
+        <div className="flex flex-wrap justify-end gap-2 mb-3">
+          <ShopActions shop={{ id: shop.id, status: shop.status, slug: shop.slug }} />
         </div>
-        <ShopActions shop={{ id: shop.id, status: shop.status, slug: shop.slug }} />
+        <div className="flex items-center gap-2 mb-1">
+          <h1 className="text-2xl font-bold text-gray-900">{shop.name}</h1>
+          <StatusBadge status={shop.status} />
+        </div>
+        <p className="text-sm text-gray-500">/s/{shop.slug} · {plan?.name ?? "Free"} plan</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <StatCard label="Items" value={shop._count.items} href={`/shops/${shopId}/items`} />
-        <StatCard label="Categories" value={shop._count.categories} href={`/shops/${shopId}/categories`} />
-        <StatCard label="Collections" value={shop._count.collections} href={`/shops/${shopId}/collections`} />
+        <Link href={`/shops/${shopId}/items`} className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-blue-300 transition-colors">
+          <p className="text-2xl font-bold text-gray-900">{shop._count.items}</p>
+          <p className="text-sm text-gray-500">Items</p>
+        </Link>
+        <Link href={`/shops/${shopId}/categories`} className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-blue-300 transition-colors">
+          <p className="text-2xl font-bold text-gray-900">{shop._count.categories}</p>
+          <p className="text-sm text-gray-500">Categories</p>
+        </Link>
+        <Link href={`/shops/${shopId}/collections`} className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-blue-300 transition-colors">
+          <p className="text-2xl font-bold text-gray-900">{shop._count.collections}</p>
+          <p className="text-sm text-gray-500">Collections</p>
+        </Link>
       </div>
 
       {/* Nav Cards */}
-      <div className="grid grid-cols-2 gap-4">
-        <NavCard href={`/shops/${shopId}/items`} title="Items" desc="Manage your product/service catalog" icon="🛍️" />
-        <NavCard href={`/shops/${shopId}/categories`} title="Categories" desc="Organise items into categories" icon="📂" />
-        <NavCard href={`/shops/${shopId}/collections`} title="Collections" desc="Seasonal & featured collections" icon="✨" />
-        <NavCard href={`/shops/${shopId}/settings`} title="Settings" desc="Hours, banner, contact info" icon="⚙️" />
-        <NavCard href={`/shops/${shopId}/qr`} title="QR Code" desc="Download QR for your storefront" icon="📱" />
-        <NavCard
-          href={`/shops/${shopId}/analytics`}
-          title="Analytics"
-          desc={plan?.analyticsEnabled ? "View your shop analytics" : "Upgrade for analytics"}
-          icon="📊"
-        />
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+        {navCards.map((card) => (
+          <Link
+            key={card.href}
+            href={card.href}
+            className="bg-white rounded-xl border border-gray-200 p-4 hover:border-blue-300 transition-colors flex items-center gap-4"
+          >
+            <div className={`p-2.5 rounded-lg shrink-0 ${card.color}`}>
+              <card.icon className="w-5 h-5" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-medium text-gray-900 text-sm">{card.title}</p>
+              <p className="text-xs text-gray-500 truncate">{card.desc}</p>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, string> = {
-    PUBLISHED: "bg-green-100 text-green-700",
-    DRAFT: "bg-gray-100 text-gray-600",
-    SUSPENDED: "bg-red-100 text-red-700",
-    ARCHIVED: "bg-yellow-100 text-yellow-700",
-  };
-  return (
-    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${map[status] ?? ""}`}>
-      {status.toLowerCase()}
-    </span>
-  );
-}
-
-function StatCard({ label, value, href }: { label: string; value: number; href: string }) {
-  return (
-    <Link href={href} className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-blue-300 transition-colors">
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
-      <p className="text-sm text-gray-500">{label}</p>
-    </Link>
-  );
-}
-
-function NavCard({ href, title, desc, icon }: { href: string; title: string; desc: string; icon: string }) {
-  return (
-    <Link href={href} className="bg-white rounded-xl border border-gray-200 p-4 hover:border-blue-300 transition-colors">
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">{icon}</span>
-        <div>
-          <p className="font-medium text-gray-900 text-sm">{title}</p>
-          <p className="text-xs text-gray-500">{desc}</p>
-        </div>
-      </div>
-    </Link>
   );
 }
