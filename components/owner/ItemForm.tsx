@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { createItemAction, updateItemAction } from "@/lib/actions/item";
 import { CreateItemSchema, type CreateItemInput } from "@/lib/validations/item";
 import { ImageUpload } from "./ImageUpload";
+import { Save, X } from "lucide-react";
 
 interface Props {
   shopId: string;
@@ -49,98 +50,113 @@ export function ItemForm({ shopId, itemId, categories, businessType, defaultValu
     router.push(`/shops/${shopId}/items`);
   }
 
-  const inputClass = "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+  const inputClass = "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
   const labelClass = "block text-sm font-medium text-gray-700 mb-1";
   const errClass = "text-red-500 text-xs mt-1";
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {/* Image */}
-      <div>
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
         <label className={labelClass}>Item Image</label>
         <ImageUpload
           folder={`shops/${shopId}/items`}
           value={imageUrl}
           onChange={(url, pid) => { setImageUrl(url); setImagePublicId(pid); setValue("imageUrl", url); setValue("imagePublicId", pid); }}
           label="Upload Item Image"
-          aspectHint="Square, 400×400px recommended"
+          aspectHint="Square, 400x400px recommended"
         />
       </div>
 
-      {/* Name */}
-      <div>
-        <label className={labelClass}>Item Name *</label>
-        <input {...register("name")} className={inputClass} placeholder="e.g. Gulab Jamun" />
-        {errors.name && <p className={errClass}>{errors.name.message}</p>}
-      </div>
-
-      {/* Type */}
-      <div>
-        <label className={labelClass}>Item Type</label>
-        <select {...register("itemType")} className={inputClass}>
-          <option value="PRODUCT">Product</option>
-          <option value="SERVICE">Service</option>
-        </select>
-      </div>
-
-      {/* Price row */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* Basic Info */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
         <div>
-          <label className={labelClass}>Price (₹) *</label>
-          <input {...register("price")} className={inputClass} placeholder="0.00" type="number" step="0.01" min="0" />
-          {errors.price && <p className={errClass}>{errors.price.message}</p>}
+          <label className={labelClass}>Item Name *</label>
+          <input {...register("name")} className={inputClass} placeholder="e.g. Gulab Jamun" />
+          {errors.name && <p className={errClass}>{errors.name.message}</p>}
         </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className={labelClass}>Item Type</label>
+            <select {...register("itemType")} className={inputClass}>
+              <option value="PRODUCT">Product</option>
+              <option value="SERVICE">Service</option>
+            </select>
+          </div>
+          <div>
+            <label className={labelClass}>Category</label>
+            <select {...register("categoryId")} className={inputClass}>
+              <option value="">— No category —</option>
+              {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className={labelClass}>Price (₹) *</label>
+            <input {...register("price")} className={inputClass} placeholder="0.00" type="number" step="0.01" min="0" />
+            {errors.price && <p className={errClass}>{errors.price.message}</p>}
+          </div>
+          <div>
+            <label className={labelClass}>Old Price (₹)</label>
+            <input {...register("oldPrice")} className={inputClass} placeholder="0.00" type="number" step="0.01" min="0" />
+          </div>
+        </div>
+
         <div>
-          <label className={labelClass}>Old Price (₹)</label>
-          <input {...register("oldPrice")} className={inputClass} placeholder="0.00" type="number" step="0.01" min="0" />
+          <label className={labelClass}>Description</label>
+          <textarea {...register("description")} className={inputClass} rows={3} placeholder="Brief description (optional)" />
+        </div>
+
+        {showDietary && (
+          <div>
+            <label className={labelClass}>Dietary Type</label>
+            <select {...register("dietaryType")} className={inputClass}>
+              <option value="NA">Not Applicable</option>
+              <option value="VEG">🟢 Veg</option>
+              <option value="NON_VEG">🔴 Non-Veg</option>
+              <option value="EGG">🥚 Egg</option>
+            </select>
+          </div>
+        )}
+      </div>
+
+      {/* Toggles */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <p className="text-sm font-medium text-gray-700 mb-3">Visibility</p>
+        <div className="flex flex-wrap gap-5">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <ToggleField register={register as any} name="isAvailable" label="Available" />
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <ToggleField register={register as any} name="isFeatured" label="Featured" />
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <ToggleField register={register as any} name="isBestseller" label="Bestseller" />
         </div>
       </div>
 
-      {/* Category */}
-      <div>
-        <label className={labelClass}>Category</label>
-        <select {...register("categoryId")} className={inputClass}>
-          <option value="">— No category —</option>
-          {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-        </select>
-      </div>
-
-      {/* Description */}
-      <div>
-        <label className={labelClass}>Description</label>
-        <textarea {...register("description")} className={inputClass} rows={2} placeholder="Brief description (optional)" />
-      </div>
-
-      {/* Dietary */}
-      {showDietary && (
-        <div>
-          <label className={labelClass}>Dietary Type</label>
-          <select {...register("dietaryType")} className={inputClass}>
-            <option value="NA">Not Applicable</option>
-            <option value="VEG">🟢 Veg</option>
-            <option value="NON_VEG">🔴 Non-Veg</option>
-            <option value="EGG">🥚 Egg</option>
-          </select>
+      {serverError && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+          <p className="text-red-600 text-sm">{serverError}</p>
         </div>
       )}
 
-      {/* Toggles */}
-      <div className="flex flex-wrap gap-4">
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <ToggleField register={register as any} name="isAvailable" label="Available" />
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <ToggleField register={register as any} name="isFeatured" label="Featured" />
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <ToggleField register={register as any} name="isBestseller" label="Bestseller" />
-      </div>
-
-      {serverError && <div className="bg-red-50 border border-red-200 rounded-lg p-3"><p className="text-red-600 text-sm">{serverError}</p></div>}
-
-      <div className="flex gap-3 pt-2">
-        <button type="button" onClick={() => router.push(`/shops/${shopId}/items`)} className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-lg font-medium text-sm hover:bg-gray-50">
+      <div className="flex gap-3 pt-1">
+        <button
+          type="button"
+          onClick={() => router.push(`/shops/${shopId}/items`)}
+          className="flex-1 inline-flex items-center justify-center gap-2 border border-gray-300 text-gray-700 py-2.5 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors"
+        >
+          <X className="w-4 h-4" />
           Cancel
         </button>
-        <button type="submit" disabled={loading} className="flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-blue-700 disabled:opacity-50">
+        <button
+          type="submit"
+          disabled={loading}
+          className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-blue-700 disabled:opacity-50 transition-colors"
+        >
+          <Save className="w-4 h-4" />
           {loading ? "Saving..." : itemId ? "Save Changes" : "Add Item"}
         </button>
       </div>
@@ -151,7 +167,7 @@ export function ItemForm({ shopId, itemId, categories, businessType, defaultValu
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ToggleField({ register, name, label }: { register: (name: string) => any; name: string; label: string }) {
   return (
-    <label className="flex items-center gap-2 cursor-pointer">
+    <label className="flex items-center gap-2.5 cursor-pointer">
       <input {...register(name)} type="checkbox" className="w-4 h-4 rounded accent-blue-600" />
       <span className="text-sm text-gray-700">{label}</span>
     </label>

@@ -22,12 +22,12 @@ export function PlanLimitBanner({ feature, current, limit, planName }: Props) {
       {atLimit ? (
         <p>
           <strong>{label} limit reached</strong> ({current}/{limit} on {planName} plan).{" "}
-          <a href="/upgrade" className="underline font-medium">Upgrade to add more.</a>
+          <a href="mailto:sales@innovgeist.com" className="underline font-medium">Contact sales@innovgeist.com to upgrade.</a>
         </p>
       ) : (
         <p>
           {current}/{limit} {feature} used on {planName} plan.{" "}
-          <a href="/upgrade" className="underline font-medium">Upgrade for more.</a>
+          <a href="mailto:sales@innovgeist.com" className="underline font-medium">Contact sales@innovgeist.com to upgrade.</a>
         </p>
       )}
     </div>

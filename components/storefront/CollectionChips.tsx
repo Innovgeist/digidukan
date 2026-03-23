@@ -1,5 +1,7 @@
 "use client";
 
+import { Tag } from "lucide-react";
+
 interface Collection {
   id: string;
   name: string;
@@ -21,7 +23,6 @@ export function CollectionChips({
   primaryColor = "#3B82F6",
 }: Props) {
   const handleClick = (id: string) => {
-    // Clicking the already-selected chip deselects it
     onSelect(selected === id ? null : id);
   };
 
@@ -34,21 +35,23 @@ export function CollectionChips({
             <button
               key={col.id}
               onClick={() => handleClick(col.id)}
-              className="whitespace-nowrap flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium border transition-colors"
+              className="whitespace-nowrap flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all"
               style={
                 isActive
                   ? {
                       backgroundColor: primaryColor,
                       color: "#fff",
                       borderColor: primaryColor,
+                      boxShadow: `0 2px 8px ${primaryColor}40`,
                     }
                   : {
                       backgroundColor: "#fff",
                       color: "#374151",
-                      borderColor: "#d1d5db",
+                      borderColor: "#e5e7eb",
                     }
               }
             >
+              <Tag className="w-3 h-3" />
               {col.name}
             </button>
           );

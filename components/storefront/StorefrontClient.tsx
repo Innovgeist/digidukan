@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Search, X } from "lucide-react";
 import { CollectionChips } from "@/components/storefront/CollectionChips";
 import { FeaturedSection } from "@/components/storefront/FeaturedSection";
 import { ItemGrid } from "@/components/storefront/ItemGrid";
@@ -58,20 +59,16 @@ export function StorefrontClient({
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // All items come in as a flat list — no risk of missing uncategorized items.
   const allItems = items;
 
   const filteredItems = allItems.filter((item) => {
-    // Collection filter
     if (selectedCollectionId) {
       const col = collections.find((c) => c.id === selectedCollectionId);
       if (col && !col.itemIds.includes(item.id)) return false;
     }
-    // Category filter — match by categoryId, not by scanning nested arrays
     if (selectedCategoryId) {
       if (item.categoryId !== selectedCategoryId) return false;
     }
-    // Search filter
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       return (
@@ -92,12 +89,12 @@ export function StorefrontClient({
 
   const handleCollectionSelect = (id: string | null) => {
     setSelectedCollectionId(id);
-    setSelectedCategoryId(null); // clear category when collection changes
+    setSelectedCategoryId(null);
   };
 
   const handleCategorySelect = (id: string | null) => {
     setSelectedCategoryId(id);
-    setSelectedCollectionId(null); // clear collection when category changes
+    setSelectedCollectionId(null);
   };
 
   return (
@@ -115,16 +112,15 @@ export function StorefrontClient({
 
         {/* Category tabs */}
         {categories.length > 0 && (
-          <div className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200 px-4 py-2">
-            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-              {/* All tab */}
+          <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 py-2.5">
+            <div className="flex gap-2 overflow-x-auto pb-0.5 scrollbar-hide">
               <button
                 onClick={() => handleCategorySelect(null)}
-                className="whitespace-nowrap flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+                className="whitespace-nowrap flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all"
                 style={
                   selectedCategoryId === null
-                    ? { backgroundColor: primaryColor, color: "#fff" }
-                    : { backgroundColor: "#f3f4f6", color: "#374151" }
+                    ? { backgroundColor: primaryColor, color: "#fff", boxShadow: `0 2px 8px ${primaryColor}30` }
+                    : { backgroundColor: "#f3f4f6", color: "#6b7280" }
                 }
               >
                 All
@@ -133,11 +129,11 @@ export function StorefrontClient({
                 <button
                   key={cat.id}
                   onClick={() => handleCategorySelect(cat.id)}
-                  className="whitespace-nowrap flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+                  className="whitespace-nowrap flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all"
                   style={
                     selectedCategoryId === cat.id
-                      ? { backgroundColor: primaryColor, color: "#fff" }
-                      : { backgroundColor: "#f3f4f6", color: "#374151" }
+                      ? { backgroundColor: primaryColor, color: "#fff", boxShadow: `0 2px 8px ${primaryColor}30` }
+                      : { backgroundColor: "#f3f4f6", color: "#6b7280" }
                   }
                 >
                   {cat.name}
@@ -150,24 +146,22 @@ export function StorefrontClient({
         {/* Search bar */}
         <div className="px-4 py-3">
           <div className="relative flex items-center">
-            <span className="absolute left-3 text-gray-400 pointer-events-none">
-              🔍
-            </span>
+            <Search className="absolute left-3 w-4 h-4 text-gray-400 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search items..."
-              className="w-full pl-9 pr-9 py-2 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent"
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent"
               style={{ "--tw-ring-color": primaryColor } as React.CSSProperties}
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 text-gray-400 hover:text-gray-600 text-lg leading-none"
+                className="absolute right-3 text-gray-400 hover:text-gray-600"
                 aria-label="Clear search"
               >
-                ×
+                <X className="w-4 h-4" />
               </button>
             )}
           </div>

@@ -49,16 +49,18 @@ export default async function DashboardPage() {
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
-      <div className="flex items-center justify-between">
+      <div>
+        <div className="flex justify-end mb-3">
+          <Link
+            href="/shops/new"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          >
+            + New Shop
+          </Link>
+        </div>
         <h1 className="text-2xl font-bold text-gray-900">
           Welcome back, {session.user.name?.split(" ")[0]}
         </h1>
-        <Link
-          href="/shops/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-        >
-          + New Shop
-        </Link>
       </div>
 
       {/* Stats */}

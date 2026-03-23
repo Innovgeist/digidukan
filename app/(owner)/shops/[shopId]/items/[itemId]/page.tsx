@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect, notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { ItemForm } from "@/components/owner/ItemForm";
 
 export default async function EditItemPage({ params }: { params: Promise<{ shopId: string; itemId: string }> }) {
@@ -21,9 +22,10 @@ export default async function EditItemPage({ params }: { params: Promise<{ shopI
   });
 
   return (
-    <div className="p-6 max-w-2xl">
-      <a href={`/shops/${shopId}/items`} className="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block">
-        ← Back to Items
+    <div className="p-6 lg:p-8 max-w-2xl">
+      <a href={`/shops/${shopId}/items`} className="inline-flex items-center gap-1.5 text-sm text-gray-700 hover:text-gray-900 font-medium mb-3">
+        <ArrowLeft className="w-4 h-4" />
+        Back to Items
       </a>
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Edit Item</h1>
       <ItemForm

@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
+import { ArrowLeft, Plus } from "lucide-react";
 import { ItemList } from "./ItemList";
 import { canAddItem } from "@/lib/plan";
 
@@ -28,23 +29,32 @@ export default async function ItemsPage({ params }: { params: Promise<{ shopId: 
 
   return (
     <div className="p-6 lg:p-8">
-      <div className="flex items-center gap-2 mb-1">
-        <a href={`/shops/${shopId}`} className="text-sm text-gray-500 hover:text-gray-700">← {shop.name}</a>
-      </div>
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Items</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{limitCheck.current}/{limitCheck.limit === -1 ? "∞" : limitCheck.limit} items used</p>
-        </div>
+      <div className="flex items-center justify-between mb-3">
+        <a href={`/shops/${shopId}`} className="inline-flex items-center gap-1.5 text-sm text-gray-700 hover:text-gray-900 font-medium">
+          <ArrowLeft className="w-4 h-4" />
+          {shop.name}
+        </a>
         {limitCheck.allowed ? (
-          <Link href={`/shops/${shopId}/items/new`} className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
-            + Add Item
+          <Link
+            href={`/shops/${shopId}/items/new`}
+            className="inline-flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Add Item
           </Link>
         ) : (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-            <p className="text-amber-800 text-xs font-medium">Item limit reached</p>
+          <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-right">
+            <p className="text-amber-800 text-xs font-medium">Item limit reached ({limitCheck.current}/{limitCheck.limit})</p>
+            <a href="mailto:sales@innovgeist.com" className="text-xs text-blue-600 hover:underline">Upgrade plan</a>
           </div>
         )}
+      </div>
+
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Items</h1>
+        <p className="text-sm text-gray-500 mt-0.5">
+          {limitCheck.current}/{limitCheck.limit === -1 ? "∞" : limitCheck.limit} items used
+        </p>
       </div>
 
       <ItemList
