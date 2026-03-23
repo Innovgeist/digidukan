@@ -89,12 +89,12 @@ export default function AuthLayout({
       </div>
 
       {/* Footer */}
-      <footer className="relative z-10 py-4 px-8 md:px-16 lg:px-24 flex items-center justify-between border-t border-slate-800/50">
-        <p className="text-slate-500 text-xs">
-          &copy; {new Date().getFullYear()} DigiDukan. All rights reserved.
+      <footer className="relative z-10 py-3 sm:py-4 px-4 sm:px-8 md:px-16 lg:px-24 flex items-center justify-between border-t border-slate-800/50">
+        <p className="text-slate-500 text-[10px] sm:text-xs">
+          &copy; {new Date().getFullYear()} DigiDukan
         </p>
-        <p className="text-slate-500 text-xs">
-          Created with love by{" "}
+        <p className="text-slate-500 text-[10px] sm:text-xs">
+          by{" "}
           <a
             href="https://www.innovgeist.com"
             target="_blank"
