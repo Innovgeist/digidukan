@@ -9,9 +9,9 @@ export default async function AdminPlansPage() {
   const plans = await prisma.plan.findMany({ orderBy: { createdAt: "asc" } });
 
   return (
-    <div className="p-6 max-w-3xl">
+    <div className="p-6 lg:p-8">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Plans</h1>
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {plans.map((plan) => (
           <div key={plan.id} className="bg-white rounded-xl border border-gray-200 p-5">
             <div className="flex items-start justify-between mb-3">

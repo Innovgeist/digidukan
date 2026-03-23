@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { StatusBadge } from "@/components/shared/StatusBadge";
 
 export default async function AdminShopsPage() {
   const session = await auth();
@@ -17,7 +18,7 @@ export default async function AdminShopsPage() {
   });
 
   return (
-    <div className="p-6 max-w-5xl">
+    <div className="p-6 lg:p-8">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">All Shops ({shops.length})</h1>
       <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
         {shops.map((shop) => (
@@ -47,16 +48,3 @@ export default async function AdminShopsPage() {
   );
 }
 
-function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, string> = {
-    PUBLISHED: "bg-green-100 text-green-700",
-    DRAFT: "bg-gray-100 text-gray-600",
-    SUSPENDED: "bg-red-100 text-red-700",
-    ARCHIVED: "bg-yellow-100 text-yellow-700",
-  };
-  return (
-    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${map[status] ?? ""}`}>
-      {status.toLowerCase()}
-    </span>
-  );
-}

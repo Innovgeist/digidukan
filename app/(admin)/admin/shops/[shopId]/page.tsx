@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { AdminShopActions } from "./AdminShopActions";
+import { StatusBadge } from "@/components/shared/StatusBadge";
 
 export default async function AdminShopDetailPage({
   params,
@@ -50,7 +51,7 @@ export default async function AdminShopDetailPage({
   });
 
   return (
-    <div className="p-6 max-w-2xl space-y-6">
+    <div className="p-6 lg:p-8 max-w-3xl space-y-6">
       <Link href="/admin/shops" className="text-sm text-gray-500 hover:text-gray-700 inline-block">
         ← All Shops
       </Link>
@@ -128,16 +129,3 @@ export default async function AdminShopDetailPage({
   );
 }
 
-function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, string> = {
-    PUBLISHED: "bg-green-100 text-green-700",
-    DRAFT: "bg-gray-100 text-gray-600",
-    SUSPENDED: "bg-red-100 text-red-700",
-    ARCHIVED: "bg-yellow-100 text-yellow-700",
-  };
-  return (
-    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${map[status] ?? ""}`}>
-      {status.toLowerCase()}
-    </span>
-  );
-}

@@ -11,8 +11,6 @@ const ADMIN_PATHS = ["/admin"];
 export default auth((req) => {
   const { pathname } = req.nextUrl;
   const session = req.auth;
-  console.log("[middleware]", pathname, "session:", !!session?.user, session?.user?.email ?? "none");
-
   // Always allow public storefront, marketing pages, API routes
   if (
     pathname.startsWith("/s/") ||
