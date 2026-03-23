@@ -62,7 +62,8 @@ export function ShopStatusPieChart({
           dataKey="count"
           nameKey="status"
           paddingAngle={3}
-          label={({ status, count }) => `${status.toLowerCase()} (${count})`}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          label={((props: any) => `${String(props.name ?? "").toLowerCase()} (${props.value})`) as any}
         >
           {data.map((entry) => (
             <Cell
