@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: "DigiDukan — Digital Storefront for Local Businesses",
   description:
     "Create your digital shop, share via QR code, and let customers order on WhatsApp.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
