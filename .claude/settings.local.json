@@ -25,7 +25,15 @@
       "Bash(ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/app/\\\\\\(admin\\\\\\)/admin/ 2>/dev/null || echo \"no admin pages yet\")",
       "Bash(ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/app/\\\\\\(admin\\\\\\)/admin/shops/ 2>/dev/null && ls /c/Users/ANALYTICSLIV/Desktop/DigiDukan/lib/actions/admin.ts 2>/dev/null && echo \"admin files exist\")",
       "Bash(wc -l \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\\\\app\\\\\\(admin\\)\\\\admin\\\\owners\"/* 2>/dev/null; wc -l \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\\\\app\\\\\\(admin\\)\\\\admin\\\\owners\"/new/* 2>/dev/null; wc -l \"C:\\\\Users\\\\ANALYTICSLIV\\\\Desktop\\\\DigiDukan\\\\app\\\\\\(admin\\)\\\\admin\\\\owners\"/[userId]/* 2>/dev/null)",
-      "Bash(npm install:*\\\\)"
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)",
+      "Bash(npm install:*)",
+      "Bash(xargs wc:*)",
+      "Bash(xargs grep:*)",
+      "Bash(npx prisma:*)",
+      "Bash(openssl rand:*)",
+      "Bash(npx tsx -e \":*)",
+      "Bash(node -e \":*)"
     ]
   }
 }

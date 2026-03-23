@@ -1,0 +1,7 @@
+# Ignore all seed images (keep local only)
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.svg
+!.gitkeep
