@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { CheckCircle, Clock } from "lucide-react";
 
 interface Props {
   name: string;
@@ -21,71 +20,86 @@ export function StorefrontHeader({
   const initial = name.charAt(0).toUpperCase();
 
   return (
-    <div className="max-w-lg mx-auto">
-      {/* Cover with gradient overlay */}
-      <div className="relative h-44 md:h-56 w-full overflow-hidden">
-        {coverUrl ? (
-          <Image
-            src={coverUrl}
-            alt={`${name} cover`}
-            fill
-            className="object-cover"
-            priority
-            unoptimized={!coverUrl.includes("res.cloudinary.com")}
-          />
-        ) : (
-          <div className="w-full h-full" style={{ backgroundColor: primaryColor }} />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+    <header className="max-w-lg mx-auto">
+      {/* Cover */}
+      <div className="relative h-40 sm:h-52 w-full overflow-hidden bg-paper-3">
+        {(() => {
+          const hasCover = !!coverUrl && coverUrl.trim().length > 0;
+          const src = hasCover ? coverUrl! : "/shop.png";
+          return (
+            <Image
+              src={src}
+              alt={hasCover ? `${name} cover` : ""}
+              fill
+              className="object-cover"
+              priority
+              unoptimized={!hasCover || !coverUrl!.includes("res.cloudinary.com")}
+            />
+          );
+        })()}
+        <div className="absolute inset-0 bg-grain opacity-40" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-paper to-transparent" />
       </div>
 
-      {/* Profile row */}
-      <div className="px-4 pb-4">
-        {/* Logo */}
-        <div className="mb-3 -mt-10 relative inline-block">
-          {logoUrl ? (
-            <div
-              className="relative w-20 h-20 rounded-full overflow-hidden shadow-md"
-              style={{ border: `3px solid ${primaryColor}` }}
-            >
-              <Image
-                src={logoUrl}
-                alt={`${name} logo`}
-                width={80}
-                height={80}
-                className="object-cover"
-                unoptimized={!logoUrl.includes("res.cloudinary.com")}
-              />
-            </div>
-          ) : (
-            <div
-              className="w-20 h-20 rounded-full shadow-md flex items-center justify-center"
-              style={{ backgroundColor: primaryColor, border: `3px solid ${primaryColor}` }}
-            >
-              <span className="text-white text-3xl font-bold">{initial}</span>
-            </div>
-          )}
-        </div>
+      {/* Body */}
+      <div className="px-5 pt-0 pb-5 reveal-up">
+        {/* Logo + open badge row */}
+        <div className="flex items-end justify-between -mt-12 mb-3">
+          <div className="relative">
+            {logoUrl ? (
+              <div
+                className="relative w-24 h-24 rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(31,24,18,0.15)]"
+                style={{ border: `3px solid ${primaryColor}`, background: "var(--color-paper-2)" }}
+              >
+                <Image
+                  src={logoUrl}
+                  alt={`${name} logo`}
+                  width={96}
+                  height={96}
+                  className="object-cover w-full h-full"
+                  unoptimized={!logoUrl.includes("res.cloudinary.com")}
+                />
+              </div>
+            ) : (
+              <div
+                className="w-24 h-24 rounded-2xl shadow-[0_8px_24px_rgba(31,24,18,0.15)] flex items-center justify-center font-display font-bold text-white text-4xl"
+                style={{
+                  background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}cc)`,
+                  border: `3px solid ${primaryColor}`,
+                }}
+              >
+                {initial}
+              </div>
+            )}
+          </div>
 
-        {/* Name and badges */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">{name}</h1>
+          {/* Open / Closed stamp */}
           <span
-            className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full ${
+            className={`stamp text-[10px] font-bold px-3 py-1.5 rounded-md mb-1 -rotate-3 shadow-sm border ${
               isOpen
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-600"
+                ? "bg-leaf-soft text-leaf border-leaf/30"
+                : "bg-brick-soft text-brick border-brick/30"
             }`}
           >
-            {isOpen ? <CheckCircle className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
-            {isOpen ? "Open" : "Closed"}
+            {isOpen ? "● Open Now" : "● Closed"}
           </span>
         </div>
 
+        {/* Name */}
+        <h1 className="font-display font-semibold text-3xl sm:text-4xl text-ink leading-[1.05] tracking-tight">
+          {name}
+        </h1>
+
+        {/* Description */}
         {description && (
-          <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">{description}</p>
+          <p className="mt-2 text-[15px] text-ink-2 leading-relaxed max-w-md">
+            {description}
+          </p>
         )}
+
+        {/* Hand-drawn rule line */}
+        <div className="rule-line mt-4 opacity-80" />
       </div>
-    </div>
+    </header>
   );
 }

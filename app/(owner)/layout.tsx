@@ -40,7 +40,7 @@ export default async function OwnerLayout({
 
       <div className="flex flex-1">
         <OwnerNav email={session.user.email ?? ""} />
-        <main className="flex-1 overflow-auto bg-gray-50 lg:h-screen pt-14 lg:pt-0">
+        <main className="flex-1 overflow-auto bg-gray-50 lg:h-screen pt-14 pb-16 lg:pt-0 lg:pb-0">
           {children}
         </main>
       </div>

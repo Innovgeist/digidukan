@@ -2,6 +2,7 @@
 import { useState, useRef } from "react";
 import { uploadImageAction } from "@/lib/actions/upload";
 import Image from "next/image";
+import { ImagePlus, Loader2 } from "lucide-react";
 
 interface Props {
   folder: string;
@@ -61,14 +62,15 @@ export function ImageUpload({ folder, value, onChange, label = "Upload Image", a
           </div>
         ) : uploading ? (
           <div className="py-4">
-            <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+            <Loader2 className="w-6 h-6 text-blue-600 animate-spin mx-auto mb-2" />
             <p className="text-sm text-gray-500">Uploading...</p>
           </div>
         ) : (
-          <div className="py-4">
-            <p className="text-sm font-medium text-gray-700">📷 {label}</p>
-            {aspectHint && <p className="text-xs text-gray-400 mt-1">{aspectHint}</p>}
-            <p className="text-xs text-gray-400 mt-1">JPEG, PNG, WebP · max 5MB</p>
+          <div className="py-4 flex flex-col items-center gap-1">
+            <ImagePlus className="w-6 h-6 text-gray-500" strokeWidth={1.8} />
+            <p className="text-sm font-medium text-gray-700">{label}</p>
+            {aspectHint && <p className="text-xs text-gray-400">{aspectHint}</p>}
+            <p className="text-xs text-gray-400">JPEG, PNG, WebP · max 5MB</p>
           </div>
         )}
       </div>

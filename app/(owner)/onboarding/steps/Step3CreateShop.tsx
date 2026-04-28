@@ -68,13 +68,13 @@ export function Step3CreateShop({ onNext }: Props) {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Shop Name *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Shop Name *</label>
           <input {...register("name")} placeholder="e.g. Ramesh Sweet House" className="input-field" />
           {errors.name && <p className="err">{errors.name.message}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Shop URL *
             {slugAvailable === true && <span className="ml-2 text-green-600 text-xs">✓ available</span>}
             {slugAvailable === false && <span className="ml-2 text-red-500 text-xs">✗ taken</span>}
@@ -88,12 +88,12 @@ export function Step3CreateShop({ onNext }: Props) {
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
             <input {...register("phone")} placeholder="9876543210" className="input-field" />
             {errors.phone && <p className="err">{errors.phone.message}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">WhatsApp *</label>
             <input {...register("whatsappNumber")} placeholder="9876543210" className="input-field" />
             {errors.whatsappNumber && <p className="err">{errors.whatsappNumber.message}</p>}
           </div>

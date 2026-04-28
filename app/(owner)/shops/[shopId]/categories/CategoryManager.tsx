@@ -114,11 +114,11 @@ export function CategoryManager({ shopId, categories: initial, canAdd }: Props) 
             <h3 className="font-semibold text-gray-900 mb-4">{editingId ? "Edit Category" : "New Category"}</h3>
             <div className="space-y-3 mb-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Name *</label>
                 <input value={formData.name} onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. Sweets" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description (optional)</label>
                 <textarea value={formData.description} onChange={(e) => setFormData((p) => ({ ...p, description: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" rows={2} placeholder="Brief description" />
               </div>
               {error && <p className="text-red-500 text-xs">{error}</p>}

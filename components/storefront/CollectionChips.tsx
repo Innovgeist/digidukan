@@ -1,6 +1,6 @@
 "use client";
 
-import { Tag } from "lucide-react";
+import { Bookmark } from "lucide-react";
 
 interface Collection {
   id: string;
@@ -20,14 +20,14 @@ export function CollectionChips({
   collections,
   selected,
   onSelect,
-  primaryColor = "#3B82F6",
+  primaryColor = "#D9622E",
 }: Props) {
   const handleClick = (id: string) => {
     onSelect(selected === id ? null : id);
   };
 
   return (
-    <div className="px-4 py-3">
+    <div className="px-5 pt-1 pb-3">
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {collections.map((col) => {
           const isActive = selected === col.id;
@@ -35,23 +35,21 @@ export function CollectionChips({
             <button
               key={col.id}
               onClick={() => handleClick(col.id)}
-              className="whitespace-nowrap flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all"
+              className={`press-soft whitespace-nowrap shrink-0 inline-flex items-center gap-2 px-4 h-11 rounded-full text-[14px] font-medium border-2 transition-colors ${
+                isActive
+                  ? "text-paper border-transparent"
+                  : "bg-paper-2 text-ink-2 border-ink-line hover:border-ink-line-strong"
+              }`}
               style={
                 isActive
                   ? {
                       backgroundColor: primaryColor,
-                      color: "#fff",
-                      borderColor: primaryColor,
-                      boxShadow: `0 2px 8px ${primaryColor}40`,
+                      boxShadow: `0 2px 0 ${primaryColor}40`,
                     }
-                  : {
-                      backgroundColor: "#fff",
-                      color: "#374151",
-                      borderColor: "#e5e7eb",
-                    }
+                  : undefined
               }
             >
-              <Tag className="w-3 h-3" />
+              <Bookmark className={`w-3.5 h-3.5 ${isActive ? "" : "text-ink-3"}`} fill={isActive ? "currentColor" : "none"} strokeWidth={2.2} />
               {col.name}
             </button>
           );

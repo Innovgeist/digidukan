@@ -1,7 +1,7 @@
 "use client";
 
 import { ItemCard } from "@/components/storefront/ItemCard";
-import { Search } from "lucide-react";
+import { SearchX } from "lucide-react";
 
 interface Item {
   id: string;
@@ -22,21 +22,26 @@ interface Props {
   primaryColor?: string;
 }
 
-export function ItemGrid({ items, primaryColor = "#3B82F6" }: Props) {
+export function ItemGrid({ items, primaryColor = "#D9622E" }: Props) {
   if (items.length === 0) {
     return (
-      <div className="px-4 py-16 text-center">
-        <div className="mx-auto w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-3">
-          <Search className="w-5 h-5 text-gray-400" />
+      <div className="px-5 py-16 text-center">
+        <div className="mx-auto w-14 h-14 rounded-2xl bg-paper-3 border border-ink-line flex items-center justify-center mb-4">
+          <SearchX className="w-6 h-6 text-ink-3" strokeWidth={1.8} />
         </div>
-        <p className="text-gray-500 text-sm">No items found.</p>
+        <p className="font-display text-[18px] font-semibold text-ink mb-1">
+          Nothing matches that search
+        </p>
+        <p className="text-[14px] text-ink-3">
+          Try a different word or clear the filters.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="px-4 pb-6">
-      <div className="grid grid-cols-2 gap-3">
+    <div className="px-5 pt-4 pb-6">
+      <div className="grid grid-cols-2 gap-3.5">
         {items.map((item) => (
           <ItemCard key={item.id} {...item} primaryColor={primaryColor} />
         ))}

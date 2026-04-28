@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import { AlertTriangle } from "lucide-react";
 
 interface Props {
   shopId: string;
@@ -44,9 +45,10 @@ export function QRPageClient({ shopId, shopName, shopSlug: _shopSlug, qrUrl, tar
   return (
     <div className="space-y-6">
       {!isPublished && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" strokeWidth={2} />
           <p className="text-amber-800 text-sm">
-            ⚠️ Your shop is not published yet. The QR code will work once you publish the shop.
+            Your shop is not published yet. The QR code will work once you publish the shop.
           </p>
         </div>
       )}

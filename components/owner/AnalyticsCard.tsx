@@ -1,15 +1,19 @@
+import type { LucideIcon } from "lucide-react";
+
 interface Props {
-  icon: string;
+  icon: LucideIcon;
   label: string;
   count7d: number;
   count30d: number;
 }
 
-export function AnalyticsCard({ icon, label, count7d, count30d }: Props) {
+export function AnalyticsCard({ icon: Icon, label, count7d, count30d }: Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4">
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-xl">{icon}</span>
+        <span className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+          <Icon className="w-4 h-4" strokeWidth={2} />
+        </span>
         <span className="text-sm font-medium text-gray-700">{label}</span>
       </div>
       <div className="grid grid-cols-2 gap-3">

@@ -28,7 +28,7 @@ export function Step5Category({ onNext, shopId }: Props) {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Category Name *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Category Name *</label>
           <input
             {...register("name", { required: "Category name is required" })}
             placeholder="e.g. Sweets"

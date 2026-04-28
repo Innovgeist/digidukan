@@ -7,6 +7,7 @@ import { FeaturedSection } from "@/components/storefront/FeaturedSection";
 import { ItemGrid } from "@/components/storefront/ItemGrid";
 import { CartProvider } from "@/components/storefront/CartProvider";
 import { CartFloatingButton } from "@/components/storefront/CartFloatingButton";
+import { ScrollToTopButton } from "@/components/storefront/ScrollToTopButton";
 
 export interface Item {
   id: string;
@@ -99,8 +100,31 @@ export function StorefrontClient({
 
   return (
     <CartProvider shopId={shopId} shopName={shopName} whatsappNumber={whatsappNumber ?? ""}>
-      <div className="max-w-lg mx-auto">
-        {/* Collection chips */}
+      <div className="max-w-lg mx-auto pb-28">
+        {/* Search bar */}
+        <div className="px-5 pt-1 pb-3">
+          <div className="relative flex items-center">
+            <Search className="absolute left-4 w-[18px] h-[18px] text-ink-3 pointer-events-none" strokeWidth={2.2} />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search the menu…"
+              className="w-full pl-11 pr-11 py-3.5 rounded-2xl border-2 border-ink-line bg-paper-2 text-[15px] text-ink placeholder-ink-3 focus:outline-none focus:border-ink-line-strong transition-colors"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 w-7 h-7 rounded-full flex items-center justify-center text-ink-3 hover:text-ink hover:bg-paper-3"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Collection chips (curated) */}
         {collections.length > 0 && (
           <CollectionChips
             collections={collections}
@@ -110,70 +134,66 @@ export function StorefrontClient({
           />
         )}
 
-        {/* Category tabs */}
+        {/* Category tabs (navigation) */}
         {categories.length > 0 && (
-          <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 py-2.5">
-            <div className="flex gap-2 overflow-x-auto pb-0.5 scrollbar-hide">
-              <button
+          <nav className="sticky top-0 z-20 bg-paper/95 backdrop-blur-md border-b border-ink-line">
+            <div className="flex gap-1 overflow-x-auto px-3 scrollbar-hide">
+              <CategoryTab
+                label="All"
+                active={selectedCategoryId === null}
                 onClick={() => handleCategorySelect(null)}
-                className="whitespace-nowrap flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all"
-                style={
-                  selectedCategoryId === null
-                    ? { backgroundColor: primaryColor, color: "#fff", boxShadow: `0 2px 8px ${primaryColor}30` }
-                    : { backgroundColor: "#f3f4f6", color: "#6b7280" }
-                }
-              >
-                All
-              </button>
+                primaryColor={primaryColor}
+              />
               {categories.map((cat) => (
-                <button
+                <CategoryTab
                   key={cat.id}
+                  label={cat.name}
+                  active={selectedCategoryId === cat.id}
                   onClick={() => handleCategorySelect(cat.id)}
-                  className="whitespace-nowrap flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all"
-                  style={
-                    selectedCategoryId === cat.id
-                      ? { backgroundColor: primaryColor, color: "#fff", boxShadow: `0 2px 8px ${primaryColor}30` }
-                      : { backgroundColor: "#f3f4f6", color: "#6b7280" }
-                  }
-                >
-                  {cat.name}
-                </button>
+                  primaryColor={primaryColor}
+                />
               ))}
             </div>
-          </div>
+          </nav>
         )}
 
-        {/* Search bar */}
-        <div className="px-4 py-3">
-          <div className="relative flex items-center">
-            <Search className="absolute left-3 w-4 h-4 text-gray-400 pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search items..."
-              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent"
-              style={{ "--tw-ring-color": primaryColor } as React.CSSProperties}
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-3 text-gray-400 hover:text-gray-600"
-                aria-label="Clear search"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Featured section */}
+        {/* Featured */}
         {showFeatured && <FeaturedSection items={featuredItems} primaryColor={primaryColor} />}
 
         {/* Item grid */}
         <ItemGrid items={filteredItems} primaryColor={primaryColor} />
       </div>
+      <ScrollToTopButton />
       <CartFloatingButton primaryColor={primaryColor} />
     </CartProvider>
+  );
+}
+
+function CategoryTab({
+  label,
+  active,
+  onClick,
+  primaryColor,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  primaryColor: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`relative whitespace-nowrap px-4 h-12 flex items-center font-display text-[15px] tracking-tight transition-colors ${
+        active ? "text-ink font-semibold" : "text-ink-3 hover:text-ink-2"
+      }`}
+    >
+      {label}
+      {active && (
+        <span
+          className="absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full"
+          style={{ backgroundColor: primaryColor }}
+        />
+      )}
+    </button>
   );
 }

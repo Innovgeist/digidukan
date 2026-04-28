@@ -225,7 +225,7 @@ export function CollectionManager({ shopId, collections: initial, limitReached }
             <div className="space-y-4 mb-5">
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Name *</label>
                 <input
                   value={formData.name}
                   onChange={(e) => setField("name", e.target.value)}
@@ -236,7 +236,7 @@ export function CollectionManager({ shopId, collections: initial, limitReached }
 
               {/* Type */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
                 <select
                   value={formData.type}
                   onChange={(e) => setField("type", e.target.value as CollectionType)}
@@ -251,7 +251,7 @@ export function CollectionManager({ shopId, collections: initial, limitReached }
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description (optional)</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setField("description", e.target.value)}
@@ -263,7 +263,7 @@ export function CollectionManager({ shopId, collections: initial, limitReached }
 
               {/* Cover image */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image (optional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Cover Image (optional)</label>
                 <ImageUpload
                   folder="collections"
                   value={formData.coverUrl}
@@ -278,7 +278,7 @@ export function CollectionManager({ shopId, collections: initial, limitReached }
 
               {/* Display Order */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Display Order</label>
                 <input
                   type="number"
                   min={0}
@@ -291,7 +291,7 @@ export function CollectionManager({ shopId, collections: initial, limitReached }
               {/* Date range */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Starts At (optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Starts At (optional)</label>
                   <input
                     type="date"
                     value={formData.startsAt}
@@ -300,7 +300,7 @@ export function CollectionManager({ shopId, collections: initial, limitReached }
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ends At (optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Ends At (optional)</label>
                   <input
                     type="date"
                     value={formData.endsAt}

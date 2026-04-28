@@ -6,6 +6,7 @@ import { StorefrontActions } from "@/components/storefront/StorefrontActions";
 import { StorefrontClient } from "@/components/storefront/StorefrontClient";
 import { StorefrontFooter } from "@/components/storefront/StorefrontFooter";
 import { StorefrontAnalytics } from "@/components/storefront/StorefrontAnalytics";
+import { AlertTriangle } from "lucide-react";
 
 export const revalidate = 60; // ISR
 
@@ -53,19 +54,20 @@ export default async function StorefrontPage({
 
   const isQrScan = ref === "qr";
   const showWatermark = shop.subscription?.plan.watermarkEnabled ?? true;
+  const primaryColor = shop.branding?.primaryColor ?? "#D9622E";
   const bannerActive =
     shop.banner?.isActive &&
     (!shop.banner.expiresAt || new Date(shop.banner.expiresAt) > new Date());
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-paper">
       <StorefrontAnalytics slug={slug} isQrScan={isQrScan} />
       <StorefrontHeader
         name={shop.name}
         description={shop.description}
         logoUrl={shop.branding?.logoUrl}
         coverUrl={shop.branding?.coverUrl}
-        primaryColor={shop.branding?.primaryColor ?? "#3B82F6"}
+        primaryColor={primaryColor}
         isOpen={shop.isOpen}
       />
       {bannerActive && <StorefrontBanner text={shop.banner!.text} />}
@@ -98,7 +100,7 @@ export default async function StorefrontPage({
           type: col.type,
           itemIds: col.itemCollections.map((ic) => ic.itemId),
         }))}
-        primaryColor={shop.branding?.primaryColor ?? "#3B82F6"}
+        primaryColor={primaryColor}
         shopId={shop.id}
         shopName={shop.name}
         whatsappNumber={shop.whatsappNumber ?? ""}
@@ -110,16 +112,18 @@ export default async function StorefrontPage({
 
 function SuspendedPage({ name }: { name: string }) {
   return (
-    <div className="min-h-screen flex items-center justify-center p-8 text-center">
-      <div>
-        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span className="text-2xl">⚠️</span>
+    <div className="min-h-screen bg-paper flex items-center justify-center p-8 text-center">
+      <div className="max-w-sm reveal-up">
+        <div className="w-16 h-16 bg-brick-soft border-2 border-brick/30 rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <AlertTriangle className="w-7 h-7 text-brick" strokeWidth={1.8} />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">{name}</h1>
-        <p className="text-gray-500">
+        <h1 className="font-display font-semibold text-2xl text-ink tracking-tight mb-2">
+          {name}
+        </h1>
+        <p className="text-[14px] text-ink-2 leading-relaxed">
           This shop has been temporarily suspended.
         </p>
-        <p className="text-gray-400 text-sm mt-2">
+        <p className="text-[12px] text-ink-3 mt-2">
           Please contact the shop owner for more information.
         </p>
       </div>

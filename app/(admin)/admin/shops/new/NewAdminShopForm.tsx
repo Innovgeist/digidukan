@@ -80,7 +80,7 @@ export function NewAdminShopForm({ owners }: Props) {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Shop Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Shop Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -95,7 +95,7 @@ export function NewAdminShopForm({ owners }: Props) {
 
         {/* Slug */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Slug <span className="text-red-500">*</span>
           </label>
           <div className="flex items-center gap-2">
@@ -118,7 +118,7 @@ export function NewAdminShopForm({ owners }: Props) {
 
         {/* Owner */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Owner <span className="text-red-500">*</span>
           </label>
           <select
@@ -143,7 +143,7 @@ export function NewAdminShopForm({ owners }: Props) {
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Description <span className="text-gray-400 font-normal">(optional)</span>
           </label>
           <textarea
@@ -157,7 +157,7 @@ export function NewAdminShopForm({ owners }: Props) {
 
         {/* Status */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Initial Status
           </label>
           <select

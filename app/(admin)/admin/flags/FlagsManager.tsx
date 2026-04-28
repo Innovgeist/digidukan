@@ -105,7 +105,7 @@ export function FlagsManager({ flags: initialFlags }: FlagsManagerProps) {
         <form onSubmit={handleCreate} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Flag Key <span className="text-red-500">*</span>
               </label>
               <input
@@ -121,7 +121,7 @@ export function FlagsManager({ flags: initialFlags }: FlagsManagerProps) {
               </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Description
               </label>
               <input

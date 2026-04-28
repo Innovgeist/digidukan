@@ -5,6 +5,7 @@ import { getShopPlan, isFeatureAllowed } from "@/lib/plan";
 import { AnalyticsCard } from "@/components/owner/AnalyticsCard";
 import { FeatureLock } from "@/components/owner/FeatureLock";
 import Link from "next/link";
+import { Eye, QrCode, MessageCircle, Phone, Share2, MapPin, ShoppingCart } from "lucide-react";
 
 export default async function AnalyticsPage({
   params,
@@ -63,13 +64,13 @@ export default async function AnalyticsPage({
   }
 
   const metrics = [
-    { icon: "👁", label: "Storefront Views", type: "PAGE_VIEW" },
-    { icon: "📱", label: "QR Scans", type: "QR_SCAN" },
-    { icon: "💬", label: "WhatsApp Orders", type: "WHATSAPP_CLICK" },
-    { icon: "📞", label: "Call Clicks", type: "CALL_CLICK" },
-    { icon: "🔗", label: "Share Clicks", type: "SHARE_CLICK" },
-    { icon: "📍", label: "Map Clicks", type: "MAP_CLICK" },
-    { icon: "🛒", label: "Cart Adds", type: "CART_ADD" },
+    { icon: Eye, label: "Storefront Views", type: "PAGE_VIEW" },
+    { icon: QrCode, label: "QR Scans", type: "QR_SCAN" },
+    { icon: MessageCircle, label: "WhatsApp Orders", type: "WHATSAPP_CLICK" },
+    { icon: Phone, label: "Call Clicks", type: "CALL_CLICK" },
+    { icon: Share2, label: "Share Clicks", type: "SHARE_CLICK" },
+    { icon: MapPin, label: "Map Clicks", type: "MAP_CLICK" },
+    { icon: ShoppingCart, label: "Cart Adds", type: "CART_ADD" },
   ];
 
   const totalViews7d = getCount(events7d, "PAGE_VIEW");

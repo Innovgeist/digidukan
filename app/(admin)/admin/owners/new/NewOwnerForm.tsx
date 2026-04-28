@@ -28,15 +28,15 @@ export function NewOwnerForm() {
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
         <input value={name} onChange={(e) => setName(e.target.value)} className={ic} placeholder="e.g. Rahul Sharma" required />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={ic} placeholder="owner@example.com" required />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Password *</label>
         <div className="flex gap-2">
           <input value={password} onChange={(e) => setPassword(e.target.value)} className={`${ic} flex-1`} required />
           <button type="button" onClick={() => setPassword(generatePassword())} className="text-xs border border-gray-300 rounded-lg px-2 py-1 hover:bg-gray-50 flex-shrink-0">

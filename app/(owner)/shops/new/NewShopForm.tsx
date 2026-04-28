@@ -45,13 +45,13 @@ export function NewShopForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Shop Name *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Shop Name *</label>
         <input {...register("name")} className={ic} placeholder="e.g. Sharma Sweets" />
         {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
           Shop URL *{" "}
           {slugAvailable === true && <span className="text-green-600 text-xs">✓ available</span>}
           {slugAvailable === false && <span className="text-red-500 text-xs">✗ taken</span>}
@@ -64,7 +64,7 @@ export function NewShopForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Business Type</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Business Type</label>
         <select {...register("businessType")} className={ic}>
           <option value="MIXED">Mixed (Products + Services)</option>
           <option value="RETAIL">Retail (Products)</option>
@@ -74,19 +74,19 @@ export function NewShopForm() {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
           <input {...register("phone")} className={ic} placeholder="9876543210" />
           {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">WhatsApp *</label>
           <input {...register("whatsappNumber")} className={ic} placeholder="9876543210" />
           {errors.whatsappNumber && <p className="text-red-500 text-xs mt-1">{errors.whatsappNumber.message}</p>}
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
         <textarea {...register("description")} className={ic} rows={2} placeholder="Brief description of your shop" />
       </div>
 
