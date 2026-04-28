@@ -5,7 +5,7 @@ interface Props {
 export function StorefrontFooter({ showWatermark }: Props) {
   if (!showWatermark) return null;
   return (
-    <footer className="mt-6 pb-32 text-center max-w-lg mx-auto px-5 space-y-2">
+    <footer className="mt-6  text-center max-w-lg mx-auto px-5 space-y-2">
       <div className="rule-line opacity-50 mb-3" />
       <p className="text-[12px] text-ink-3">
         Powered by{" "}
