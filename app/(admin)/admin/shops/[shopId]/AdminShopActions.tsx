@@ -9,6 +9,7 @@ import {
   archiveShopAction,
   publishShopAction,
   assignPlanAction,
+  togglePremiumAction,
 } from "@/lib/actions/admin";
 
 interface Plan {
@@ -21,6 +22,7 @@ interface Props {
   shopId: string;
   shopStatus: string;
   shopName: string;
+  shopIsPremium: boolean;
   currentPlanName: string;
   plans: Plan[];
   currentPlanId?: string;
@@ -30,6 +32,7 @@ export function AdminShopActions({
   shopId,
   shopStatus,
   shopName,
+  shopIsPremium,
   currentPlanName,
   plans,
   currentPlanId,
@@ -46,6 +49,28 @@ export function AdminShopActions({
 
   // Assign plan state
   const [selectedPlanId, setSelectedPlanId] = useState(currentPlanId ?? "");
+
+  // Premium UI state (optimistic)
+  const [isPremium, setIsPremium] = useState(shopIsPremium);
+
+  async function handleTogglePremium() {
+    const next = !isPremium;
+    setIsPremium(next);
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    const result = await togglePremiumAction(shopId, next);
+    if ("error" in result && result.error) {
+      setIsPremium(!next);
+      setError(result.error);
+      toast.error(result.error);
+    } else {
+      setSuccess(next ? "Premium UI enabled." : "Premium UI disabled.");
+      toast.success(next ? "Premium UI enabled" : "Premium UI disabled");
+      router.refresh();
+    }
+    setLoading(false);
+  }
 
   async function handleGrantTrial(e: React.FormEvent) {
     e.preventDefault();
@@ -105,6 +130,35 @@ export function AdminShopActions({
     <div className="space-y-4">
       {error && <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-red-700 text-sm">{error}</div>}
       {success && <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-green-700 text-sm">{success}</div>}
+
+      {/* Premium UI toggle */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <h2 className="font-semibold text-gray-900">Premium UI</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Switches the public storefront to the heritage / royal-cafe
+              design. Independent of the paid plan.
+            </p>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={isPremium}
+            onClick={handleTogglePremium}
+            disabled={loading}
+            className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+              isPremium ? "bg-amber-600" : "bg-gray-300"
+            }`}
+          >
+            <span
+              className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+                isPremium ? "translate-x-6" : "translate-x-1"
+              }`}
+            />
+          </button>
+        </div>
+      </div>
 
       {/* Grant trial */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">

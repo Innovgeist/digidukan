@@ -6,6 +6,11 @@ import { StorefrontActions } from "@/components/storefront/StorefrontActions";
 import { StorefrontClient } from "@/components/storefront/StorefrontClient";
 import { StorefrontFooter } from "@/components/storefront/StorefrontFooter";
 import { StorefrontAnalytics } from "@/components/storefront/StorefrontAnalytics";
+import { HeaderPremium } from "@/components/storefront/premium/HeaderPremium";
+import { BannerPremium } from "@/components/storefront/premium/BannerPremium";
+import { ActionsPremium } from "@/components/storefront/premium/ActionsPremium";
+import { StorefrontClientPremium } from "@/components/storefront/premium/StorefrontClientPremium";
+import { FooterPremium } from "@/components/storefront/premium/FooterPremium";
 import { AlertTriangle } from "lucide-react";
 
 export const revalidate = 60; // ISR
@@ -55,9 +60,69 @@ export default async function StorefrontPage({
   const isQrScan = ref === "qr";
   const showWatermark = shop.subscription?.plan.watermarkEnabled ?? true;
   const primaryColor = shop.branding?.primaryColor ?? "#D9622E";
+  const isPremium = shop.isPremium;
   const bannerActive =
     shop.banner?.isActive &&
     (!shop.banner.expiresAt || new Date(shop.banner.expiresAt) > new Date());
+
+  const items = shop.items.map((item) => ({
+    id: item.id,
+    name: item.name,
+    price: Number(item.price),
+    oldPrice: item.oldPrice ? Number(item.oldPrice) : null,
+    description: item.description,
+    imageUrl: item.imageUrl,
+    isAvailable: item.isAvailable,
+    isFeatured: item.isFeatured,
+    isBestseller: item.isBestseller,
+    dietaryType: item.dietaryType,
+    categoryId: item.categoryId,
+    categoryName: item.category?.name ?? "",
+  }));
+  const categories = shop.categories.map((c) => ({ id: c.id, name: c.name }));
+  const collections = shop.collections.map((col) => ({
+    id: col.id,
+    name: col.name,
+    coverUrl: col.coverUrl,
+    type: col.type,
+    itemIds: col.itemCollections.map((ic) => ic.itemId),
+  }));
+
+  if (isPremium) {
+    return (
+      <div className="min-h-screen bg-[var(--color-heritage-cream)] relative">
+        <div className="fixed inset-0 pointer-events-none bg-damask z-0" aria-hidden />
+        <div className="relative z-10">
+          <StorefrontAnalytics slug={slug} isQrScan={isQrScan} />
+          <HeaderPremium
+            name={shop.name}
+            description={shop.description}
+            logoUrl={shop.branding?.logoUrl}
+            coverUrl={shop.branding?.coverUrl}
+            primaryColor={primaryColor}
+            isOpen={shop.isOpen}
+          />
+          {bannerActive && <BannerPremium text={shop.banner!.text} />}
+          <ActionsPremium
+            phone={shop.phone}
+            whatsappNumber={shop.whatsappNumber}
+            mapsUrl={shop.mapsUrl}
+            shopSlug={slug}
+          />
+          <StorefrontClientPremium
+            items={items}
+            categories={categories}
+            collections={collections}
+            primaryColor={primaryColor}
+            shopId={shop.id}
+            shopName={shop.name}
+            whatsappNumber={shop.whatsappNumber ?? ""}
+          />
+          <FooterPremium showWatermark={showWatermark} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-paper">
@@ -78,28 +143,9 @@ export default async function StorefrontPage({
         shopSlug={slug}
       />
       <StorefrontClient
-        items={shop.items.map((item) => ({
-          id: item.id,
-          name: item.name,
-          price: Number(item.price),
-          oldPrice: item.oldPrice ? Number(item.oldPrice) : null,
-          description: item.description,
-          imageUrl: item.imageUrl,
-          isAvailable: item.isAvailable,
-          isFeatured: item.isFeatured,
-          isBestseller: item.isBestseller,
-          dietaryType: item.dietaryType,
-          categoryId: item.categoryId,
-          categoryName: item.category?.name ?? "",
-        }))}
-        categories={shop.categories.map((c) => ({ id: c.id, name: c.name }))}
-        collections={shop.collections.map((col) => ({
-          id: col.id,
-          name: col.name,
-          coverUrl: col.coverUrl,
-          type: col.type,
-          itemIds: col.itemCollections.map((ic) => ic.itemId),
-        }))}
+        items={items}
+        categories={categories}
+        collections={collections}
         primaryColor={primaryColor}
         shopId={shop.id}
         shopName={shop.name}

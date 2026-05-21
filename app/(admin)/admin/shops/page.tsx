@@ -65,9 +65,16 @@ export default async function AdminShopsPage() {
                   <Store className="w-5 h-5 text-outline" strokeWidth={2} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-on-surface truncate">
-                    {shop.name}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-semibold text-on-surface truncate">
+                      {shop.name}
+                    </p>
+                    {shop.isPremium && (
+                      <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-[family-name:var(--font-inter)] font-semibold uppercase tracking-wide">
+                        Premium
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-on-surface-variant font-[family-name:var(--font-inter)] truncate">
                     /s/{shop.slug} · by {shop.owner.name ?? shop.owner.email}
                   </p>

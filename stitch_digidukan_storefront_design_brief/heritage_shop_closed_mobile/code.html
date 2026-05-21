@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DigiDukan Premium - Shop Closed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#81b9a4",
+                        "on-surface-variant": "#404945",
+                        "on-secondary-fixed-variant": "#802827",
+                        "secondary-fixed": "#ffdad7",
+                        "surface-container-high": "#eee7da",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#16503f",
+                        "surface-tint": "#326856",
+                        "outline-variant": "#c0c9c3",
+                        "surface-bright": "#fff9ee",
+                        "inverse-on-surface": "#f7f0e2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-background": "#1e1b13",
+                        "on-tertiary-fixed": "#261900",
+                        "tertiary-fixed": "#ffdea5",
+                        "surface-dim": "#e0d9cc",
+                        "on-tertiary-container": "#d0a758",
+                        "outline": "#707974",
+                        "primary-fixed-dim": "#9ad2bd",
+                        "on-tertiary-fixed-variant": "#5d4200",
+                        "on-secondary-fixed": "#410004",
+                        "inverse-surface": "#333027",
+                        "on-error-container": "#93000a",
+                        "primary": "#003226",
+                        "surface": "#fff9ee",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#b5efd8",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#002117",
+                        "tertiary-fixed-dim": "#ebc06e",
+                        "surface-container": "#f4eddf",
+                        "tertiary-container": "#563d00",
+                        "primary-container": "#0e4a3a",
+                        "tertiary": "#3a2800",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#762120",
+                        "surface-variant": "#e9e2d4",
+                        "inverse-primary": "#9ad2bd",
+                        "surface-container-low": "#faf3e5",
+                        "secondary": "#9f3f3c",
+                        "on-surface": "#1e1b13",
+                        "background": "#fff9ee"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-padding-mobile": "20px",
+                        "section-gap": "80px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "container-padding-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "section-label": ["EB Garamond"],
+                        "display-lg": ["EB Garamond"],
+                        "headline-md": ["EB Garamond"],
+                        "body-md": ["Inter"],
+                        "display-lg-mobile": ["EB Garamond"],
+                        "numeral-tabular": ["Inter"],
+                        "currency-symbol": ["EB Garamond"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "section-label": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "display-lg-mobile": ["36px", {"lineHeight": "44px", "fontWeight": "600"}],
+                        "numeral-tabular": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                        "currency-symbol": "1.1em",
+                        "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .heritage-brass-border {
+            border: 1px solid #d0a758;
+        }
+        .heritage-emerald-bg {
+            background-color: #003226;
+        }
+        .damask-pattern {
+            background-image: radial-gradient(#d0a758 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.06;
+        }
+        .brass-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+        .brass-divider::before, .brass-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #d0a758;
+        }
+        .brass-divider:not(:empty)::before { margin-right: 1rem; }
+        .brass-divider:not(:empty)::after { margin-left: 1rem; }
+        
+        .cartouche-frame {
+            border: 2px solid #d0a758;
+            position: relative;
+            padding: 1.5rem;
+        }
+        .cartouche-frame::before {
+            content: '⬥';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff9ee;
+            padding: 0 8px;
+            color: #d0a758;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen relative overflow-x-hidden">
+<!-- Subtle Texture Overlay -->
+<div class="fixed inset-0 damask-pattern pointer-events-none"></div>
+<!-- Top App Bar -->
+<header class="bg-primary text-on-primary font-headline-md text-headline-md sticky top-0 z-50 shadow-sm border-b border-outline-variant flex justify-between items-center w-full px-container-padding-mobile h-20">
+<span class="material-symbols-outlined cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-display-lg text-display-lg-mobile text-on-primary italic tracking-widest">DigiDukan Premium</h1>
+<div class="relative">
+<span class="material-symbols-outlined cursor-pointer" data-icon="shopping_bag">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">0</span>
+</div>
+</header>
+<main class="pb-32">
+<!-- Closed Status Banner -->
+<div class="mt-6 px-container-padding-mobile">
+<div class="heritage-brass-border rounded-full py-2 px-6 flex items-center justify-center space-x-3 bg-surface-bright shadow-sm">
+<span class="material-symbols-outlined text-tertiary-container scale-75" data-icon="lock_clock">lock_clock</span>
+<span class="font-section-label text-section-label uppercase text-tertiary-container">Closed for Bespoke Orders</span>
+</div>
+</div>
+<!-- Hero Section: Concierge Message -->
+<section class="mt-unit pt-10 px-container-padding-mobile text-center">
+<div class="cartouche-frame bg-surface shadow-xl">
+<h2 class="font-display-lg text-display-lg-mobile text-primary mb-4 italic">Refining Our Collection</h2>
+<p class="font-body-lg text-on-surface-variant mb-8 max-w-xs mx-auto">Our atelier is currently curating the next heritage release. While direct orders are paused, our concierge remains at your disposal.</p>
+<!-- Action Tiles (Cartouche Style) -->
+<div class="grid grid-cols-2 gap-4">
+<a class="bg-surface-bright border border-outline-variant p-4 flex flex-col items-center justify-center transition-all active:scale-95" href="tel:+123456789">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="call">call</span>
+<span class="font-section-label text-section-label uppercase text-on-surface">Concierge</span>
+</a>
+<a class="bg-surface-bright border border-outline-variant p-4 flex flex-col items-center justify-center transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="chat">chat</span>
+<span class="font-section-label text-section-label uppercase text-on-surface">WhatsApp</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Divider -->
+<div class="my-12 px-container-padding-mobile">
+<div class="brass-divider text-tertiary-container font-section-label uppercase">Preview Heritage</div>
+</div>
+<!-- Featured Items (Secondary/Muted State) -->
+<section class="px-container-padding-mobile opacity-60">
+<div class="grid grid-cols-1 gap-12">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-low heritage-brass-border p-unit flex flex-col items-center">
+<div class="w-full aspect-[4/5] overflow-hidden bg-surface-dim relative">
+<img class="w-full h-full object-cover" data-alt="A luxurious glass perfume bottle with intricate brass detailing resting on a slab of dark green marble. The lighting is moody and dramatic, reminiscent of a high-end heritage boutique. Soft golden rays catch the emerald-colored liquid inside the bottle, emphasizing a stately and exclusive atmosphere with warm wood textures in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_kt00xqqg_gYezcwDtrvK3pKwdFjq1K7Sm_RzaDHPc9JUz1PqSvB3W2KdN9v-oowrGHgo2nDauGqdRRkBeAylu6OmdjlTzcPWqngFp9tfcQAGc9-xlFTjvcAPIrAX3qD87ngbueqqjVUQkqWT66Qq0bvGmHa0yr9kZXH5w9DDpCIfHjb1zJbVqh7j3m7589lCUIe3pJnqBkbihGNENoB55DUCIAzFtvDz5JhFm3Q_2vTtKgEMIpNCF0BjXfI_lWpufXaHHlUqFHc"/>
+<div class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 font-section-label uppercase text-[10px] tracking-widest">Reserved</div>
+</div>
+<div class="py-6 text-center">
+<h3 class="font-display-lg text-[24px] text-primary mb-1">Signature Oud No. 7</h3>
+<p class="font-section-label text-section-label text-on-surface-variant uppercase">The Conservatory Collection</p>
+<div class="mt-4 flex items-center justify-center space-x-2">
+<span class="font-numeral-tabular text-on-surface">£245.00</span>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-low heritage-brass-border p-unit flex flex-col items-center">
+<div class="w-full aspect-[4/5] overflow-hidden bg-surface-dim relative">
+<img class="w-full h-full object-cover grayscale opacity-80" data-alt="A classic, heavy-weighted silver wristwatch with a leather strap positioned on a vintage parchment map. The scene is illuminated by the soft glow of a desk lamp, creating an atmosphere of timeless elegance and heritage craftsmanship. Deep emerald shadows and warm ivory highlights dominate the composition, reflecting a stately minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCtE9Mga4PAw8BWTxt0VrzBT8N8Twc4ufhA7vHPp9QVHiZ9qF2FPXENROoIrTDWmc-A5TVMOxbx4-yij-gssaACOpfNAqGVVrrtp3x4javwMK_6IaO0A3pXQhuIK7Q8fN6uG5P9nNWZe_-eCEG0b7dUvBbbpagAFmGDuXZJTDTbcjhWq1U33TmewMGCri6YMXz9rt6co1kIe_Gh3M0EThozh32DLMsLjwnoU3lAjxpHd6xXwq9N1F7mr0HQPSM0MMRai9k7Xqj5jM"/>
+</div>
+<div class="py-6 text-center">
+<h3 class="font-display-lg text-[24px] text-primary mb-1">Heritage Timepiece</h3>
+<p class="font-section-label text-section-label text-on-surface-variant uppercase">Founders Series</p>
+<div class="mt-4 flex items-center justify-center space-x-2">
+<span class="font-numeral-tabular text-on-surface">£1,890.00</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / Appointment -->
+<section class="mt-section-gap px-container-padding-mobile">
+<div class="bg-primary p-8 text-center border-t border-b border-tertiary-container">
+<h4 class="font-display-lg text-display-lg-mobile text-on-primary italic mb-4">Request Access</h4>
+<p class="text-on-primary-fixed-variant mb-6 font-body-md">Join our private list for priority notifications on the next Signature Scents release.</p>
+<div class="flex flex-col space-y-4">
+<input class="bg-transparent border-b border-tertiary-container text-on-primary placeholder:text-on-primary-fixed-variant focus:ring-0 focus:border-on-primary py-3 text-center font-section-label uppercase" placeholder="YOUR EMAIL ADDRESS" type="email"/>
+<button class="bg-tertiary-container text-tertiary-fixed font-section-label uppercase py-4 tracking-widest hover:bg-tertiary transition-all">Submit Request</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary text-on-primary w-full py-section-gap">
+<div class="max-w-7xl mx-auto px-container-padding-mobile flex flex-col items-center space-y-8">
+<h1 class="font-display-lg text-display-lg text-on-primary italic">THE COLLECTIVE</h1>
+<div class="flex flex-col items-center space-y-4 font-section-label text-section-label uppercase text-on-primary-fixed-variant">
+<a class="hover:text-on-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-on-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-on-primary transition-colors" href="#">Bespoke Concierge</a>
+</div>
+<div class="pt-8 border-t border-on-primary-fixed-variant w-full text-center">
+<p class="font-section-label text-section-label uppercase opacity-60">EST. 1894 — DIGIDUKAN HERITAGE</p>
+</div>
+</div>
+</footer>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-low border-t border-outline-variant flex justify-around items-center px-4 py-3 pb-safe">
+<div class="flex flex-col items-center justify-center text-primary font-bold">
+<span class="material-symbols-outlined scale-110 duration-200" data-icon="storefront" style="font-variation-settings: 'FILL' 1;">storefront</span>
+<span class="font-section-label text-[10px] uppercase">Boutique</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-section-label text-[10px] uppercase">Search</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-section-label text-[10px] uppercase">Wishlist</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-section-label text-[10px] uppercase">Account</span>
+</div>
+</nav>
+<!-- Floating Concierge FAB (Contextual for Home/Closed State) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-on-primary rounded-none heritage-brass-border shadow-2xl flex items-center justify-center z-40 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+</button>
+<script>
+        // Micro-interaction for the closed badge
+        const badge = document.querySelector('.heritage-brass-border');
+        if (badge) {
+            badge.addEventListener('click', () => {
+                badge.classList.add('scale-95');
+                setTimeout(() => badge.classList.remove('scale-95'), 150);
+            });
+        }
+
+        // Parallax effect on cards for premium feel
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.heritage-brass-border');
+            cards.forEach(card => {
+                const speed = 0.05;
+                const rect = card.getBoundingClientRect();
+                const offset = rect.top * speed;
+                if (card.querySelector('img')) {
+                    card.querySelector('img').style.transform = `translateY(${offset}px)`;
+                }
+            });
+        });
+    </script>
+</body></html>

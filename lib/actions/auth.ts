@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { SignupSchema, LoginSchema } from "@/lib/validations/auth";
 import { signIn } from "@/lib/auth";
+import { getSignupCode } from "@/lib/settings";
 import { AuthError } from "next-auth";
 
 export async function signupAction(data: unknown) {
@@ -12,9 +13,14 @@ export async function signupAction(data: unknown) {
     return { error: parsed.error.issues[0].message };
   }
 
-  const { name, email, password } = parsed.data;
+  const { name, email, password, inviteCode } = parsed.data;
 
   try {
+    const expectedCode = await getSignupCode();
+    if (inviteCode.trim() !== expectedCode) {
+      return { error: "Invalid invitation code." };
+    }
+
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
       return { error: "An account with this email already exists." };

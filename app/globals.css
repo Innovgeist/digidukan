@@ -94,6 +94,32 @@
   --color-brick-soft: #f3d9d2;
   --color-egg: #d9941e;
   --color-egg-soft: #f8e6c8;
+
+  /* ─── Heritage (premium variant) palette ─────────────────────────── */
+  --font-heritage: var(--font-heritage), "EB Garamond", ui-serif, Georgia, serif;
+
+  --color-heritage-cream: #fff9ee;
+  --color-heritage-cream-soft: #faf3e5;
+  --color-heritage-cream-deep: #f4eddf;
+  --color-heritage-ivory: #ffffff;
+  --color-heritage-surface: #e9e2d4;
+
+  --color-heritage-emerald: #003226;
+  --color-heritage-emerald-2: #0e4a3a;
+  --color-heritage-emerald-soft: #16503f;
+  --color-heritage-emerald-line: rgba(0, 50, 38, 0.18);
+
+  --color-heritage-maroon: #9f3f3c;
+  --color-heritage-maroon-deep: #762120;
+  --color-heritage-maroon-soft: #ffdad7;
+
+  --color-heritage-brass: #d0a758;
+  --color-heritage-brass-deep: #b08a3e;
+  --color-heritage-brass-soft: rgba(208, 167, 88, 0.22);
+
+  --color-heritage-ink: #1e1b13;
+  --color-heritage-ink-soft: #404945;
+  --color-heritage-ink-mute: #707974;
 }
 
 :root {
@@ -218,4 +244,104 @@ body {
 }
 .animate-scroll-right {
   animation: scroll-right 30s linear infinite;
+}
+
+/* ─── Heritage (premium variant) utilities ──────────────────────────────── */
+
+/* Damask micro-texture — subtle paisley repeat, low opacity */
+.bg-damask {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><g fill='none' stroke='%23003226' stroke-width='0.6' stroke-opacity='0.32'><path d='M40 8 C 24 18, 24 38, 40 48 C 56 38, 56 18, 40 8 Z'/><path d='M40 72 C 24 62, 24 42, 40 32 C 56 42, 56 62, 40 72 Z'/><circle cx='40' cy='40' r='2' fill='%23d0a758' fill-opacity='0.55'/><circle cx='8' cy='40' r='1.2' fill='%23d0a758' fill-opacity='0.4'/><circle cx='72' cy='40' r='1.2' fill='%23d0a758' fill-opacity='0.4'/></g></svg>");
+  background-size: 80px 80px;
+  background-repeat: repeat;
+  opacity: 0.06;
+}
+
+/* Brass rule divider — 1px brass line punctuated by a ◆ diamond */
+.brass-divider {
+  position: relative;
+  height: 1px;
+  background-color: var(--color-heritage-brass);
+  width: 100%;
+}
+.brass-divider::after {
+  content: "◆";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--color-heritage-cream);
+  padding: 0 12px;
+  color: var(--color-heritage-brass);
+  font-size: 12px;
+  line-height: 1;
+}
+.brass-divider-on-emerald::after {
+  background-color: var(--color-heritage-emerald);
+}
+.brass-divider-on-ivory::after {
+  background-color: var(--color-heritage-ivory);
+}
+
+/* Cartouche frame — thin brass border with corner-square ornaments */
+.cartouche-frame {
+  position: relative;
+  border: 1px solid var(--color-heritage-brass);
+  padding: 16px;
+}
+.cartouche-frame::before,
+.cartouche-frame::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--color-heritage-cream);
+  border: 1px solid var(--color-heritage-brass);
+}
+.cartouche-frame::before {
+  top: -4px;
+  left: -4px;
+}
+.cartouche-frame::after {
+  bottom: -4px;
+  right: -4px;
+}
+
+/* Premium item card — double emerald line + brass corner caps */
+.item-card-premium {
+  position: relative;
+  border: 2px double var(--color-heritage-emerald);
+  background: var(--color-heritage-ivory);
+}
+.item-card-premium .brass-cap {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--color-heritage-cream);
+  border: 1.5px solid var(--color-heritage-brass);
+}
+.item-card-premium .brass-cap-tl { top: -5px; left: -5px; }
+.item-card-premium .brass-cap-br { bottom: -5px; right: -5px; }
+
+/* Small-caps section label — EB Garamond italic, generous tracking */
+.heritage-label {
+  font-family: var(--font-heritage);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Slow ease-out fade — heritage motion language */
+@keyframes heritage-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.heritage-fade-up {
+  animation: heritage-fade-up 480ms ease-out both;
 }

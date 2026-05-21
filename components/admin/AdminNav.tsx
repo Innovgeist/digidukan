@@ -11,6 +11,7 @@ import {
   CreditCard,
   FileText,
   Flag,
+  Settings,
   Menu,
   X,
   LogOut,
@@ -24,6 +25,7 @@ const navItems = [
   { href: "/admin/plans", label: "Plans", icon: CreditCard },
   { href: "/admin/logs", label: "Logs", icon: FileText },
   { href: "/admin/flags", label: "Flags", icon: Flag },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 function NavLink({
