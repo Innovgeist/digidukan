@@ -1,10 +1,16 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect, notFound } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { canAddCollection } from "@/lib/plan";
 import { CollectionManager } from "./CollectionManager";
 
-export default async function CollectionsPage({ params }: { params: Promise<{ shopId: string }> }) {
+export default async function CollectionsPage({
+  params,
+}: {
+  params: Promise<{ shopId: string }>;
+}) {
   const { shopId } = await params;
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
@@ -19,27 +25,36 @@ export default async function CollectionsPage({ params }: { params: Promise<{ sh
   });
 
   const check = await canAddCollection(shopId);
+  const limitDisplay = check.limit === -1 ? "∞" : String(check.limit);
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="flex items-center gap-2 mb-1">
-        <a href={`/shops/${shopId}`} className="text-sm text-gray-500 hover:text-gray-700">
-          &larr; {shop.name}
-        </a>
-      </div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Collections</h1>
-        <div className="text-sm text-gray-500">
-          {check.current}/{check.limit === -1 ? "\u221e" : check.limit} used
-        </div>
+    <div className="max-w-[1200px] mx-auto p-4 md:p-6 lg:p-8 font-[family-name:var(--font-jakarta)] text-on-surface">
+      <Link
+        href={`/shops/${shopId}`}
+        className="inline-flex items-center text-primary text-sm font-medium hover:underline mb-4 group"
+      >
+        <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+        Back to {shop.name}
+      </Link>
+
+      <div className="mb-6">
+        <h1 className="text-3xl md:text-[32px] font-bold tracking-tight text-on-surface mb-1">
+          Collections
+        </h1>
+        <p className="text-base text-on-surface-variant">
+          Group items into seasonal or featured sets to highlight on your storefront.{" "}
+          <span className="font-[family-name:var(--font-inter)] font-medium">
+            {check.current}/{limitDisplay} used
+          </span>
+        </p>
       </div>
 
       {!check.allowed && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5">
-          <p className="text-amber-800 text-sm font-medium">
+        <div className="bg-tertiary-fixed/40 border border-tertiary/20 rounded-xl p-4 mb-6">
+          <p className="text-on-tertiary-fixed text-sm font-semibold">
             Collection limit reached ({check.current}/{check.limit})
           </p>
-          <p className="text-amber-700 text-xs mt-0.5">
+          <p className="text-on-tertiary-fixed-variant text-xs mt-0.5">
             Upgrade your plan to add more collections.
           </p>
         </div>

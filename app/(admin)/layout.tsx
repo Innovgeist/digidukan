@@ -13,7 +13,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-bg-app font-[family-name:var(--font-jakarta)] text-on-background">
       <AdminNav email={session.user.email ?? ""} />
       <main className="flex-1 overflow-auto lg:h-screen pt-14 lg:pt-0">
         {children}

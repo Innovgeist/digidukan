@@ -10,15 +10,13 @@ export default async function AdminPage() {
   const session = await auth();
   if (!session?.user || session.user.role !== "SUPER_ADMIN") redirect("/login");
 
-  const [ownerCount, shopCount, publishedCount, totalEvents] =
-    await Promise.all([
-      prisma.user.count({ where: { role: "OWNER" } }),
-      prisma.shop.count({ where: { deletedAt: null } }),
-      prisma.shop.count({ where: { status: "PUBLISHED", deletedAt: null } }),
-      prisma.analyticsEvent.count(),
-    ]);
+  const [ownerCount, shopCount, publishedCount, totalEvents] = await Promise.all([
+    prisma.user.count({ where: { role: "OWNER" } }),
+    prisma.shop.count({ where: { deletedAt: null } }),
+    prisma.shop.count({ where: { status: "PUBLISHED", deletedAt: null } }),
+    prisma.analyticsEvent.count(),
+  ]);
 
-  // Shop status distribution for pie chart
   const statusCounts = await prisma.shop.groupBy({
     by: ["status"],
     where: { deletedAt: null },
@@ -29,7 +27,6 @@ export default async function AdminPage() {
     count: s._count._all,
   }));
 
-  // Analytics events per day (last 7 days)
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
@@ -46,12 +43,17 @@ export default async function AdminPage() {
     eventsByDay[key] = 0;
   }
   for (const e of recentEvents) {
-    const key = e.createdAt.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+    const key = e.createdAt.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+    });
     if (key in eventsByDay) eventsByDay[key]++;
   }
-  const barData = Object.entries(eventsByDay).map(([date, count]) => ({ date, count }));
+  const barData = Object.entries(eventsByDay).map(([date, count]) => ({
+    date,
+    count,
+  }));
 
-  // Recent shops
   const recentShops = await prisma.shop.findMany({
     where: { deletedAt: null },
     orderBy: { createdAt: "desc" },
@@ -66,7 +68,6 @@ export default async function AdminPage() {
     },
   });
 
-  // Recent admin logs
   const recentLogs = await prisma.adminActionLog.findMany({
     orderBy: { createdAt: "desc" },
     take: 5,
@@ -74,91 +75,118 @@ export default async function AdminPage() {
   });
 
   const stats = [
-    { label: "Total Owners", value: ownerCount, icon: Users, color: "text-blue-600 bg-blue-50" },
-    { label: "Total Shops", value: shopCount, icon: Store, color: "text-violet-600 bg-violet-50" },
-    { label: "Published", value: publishedCount, icon: Globe, color: "text-green-600 bg-green-50" },
-    { label: "Analytics Events", value: totalEvents, icon: BarChart3, color: "text-amber-600 bg-amber-50" },
+    {
+      label: "Total Owners",
+      value: ownerCount,
+      icon: Users,
+      bg: "bg-primary-container/10",
+      fg: "text-primary-container",
+    },
+    {
+      label: "Total Shops",
+      value: shopCount,
+      icon: Store,
+      bg: "bg-secondary-container/20",
+      fg: "text-secondary",
+    },
+    {
+      label: "Published",
+      value: publishedCount,
+      icon: Globe,
+      bg: "bg-tertiary-container/10",
+      fg: "text-tertiary",
+    },
+    {
+      label: "Analytics Events",
+      value: totalEvents,
+      icon: BarChart3,
+      bg: "bg-surface-tint/10",
+      fg: "text-surface-tint",
+    },
   ];
 
   return (
-    <div className="p-6 lg:p-8 space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Admin Overview</h1>
+    <div className="max-w-[1200px] mx-auto p-4 md:p-6 lg:p-8 space-y-6 font-[family-name:var(--font-jakarta)] text-on-surface">
+      <h1 className="text-3xl md:text-[32px] font-bold tracking-tight text-on-surface">
+        Admin Overview
+      </h1>
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((s) => (
           <div
             key={s.label}
-            className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4"
+            className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/30 shadow-stitch-1 flex flex-col justify-between min-h-[120px]"
           >
-            <div className={`p-3 rounded-lg ${s.color}`}>
-              <s.icon className="w-5 h-5" />
+            <div className="flex justify-between items-start mb-2">
+              <span className="font-[family-name:var(--font-inter)] text-sm font-medium text-on-surface-variant">
+                {s.label}
+              </span>
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${s.bg}`}
+              >
+                <s.icon className={`w-[18px] h-[18px] ${s.fg}`} strokeWidth={2} />
+              </div>
             </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-900">
-                {s.value.toLocaleString()}
-              </p>
-              <p className="text-xs text-gray-500">{s.label}</p>
-            </div>
+            <span className="text-2xl font-semibold text-on-surface">
+              {s.value.toLocaleString()}
+            </span>
           </div>
         ))}
       </div>
 
-      {/* Charts row */}
+      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Bar chart */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="font-semibold text-gray-900 mb-4">
+        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-stitch-1 p-5">
+          <h2 className="text-xl font-semibold text-on-surface mb-4">
             Events — Last 7 Days
           </h2>
           {barData.some((d) => d.count > 0) ? (
             <EventsBarChart data={barData} />
           ) : (
-            <div className="h-[260px] flex items-center justify-center text-sm text-gray-400">
+            <div className="h-[260px] flex items-center justify-center text-sm text-on-surface-variant">
               No analytics events yet
             </div>
           )}
         </div>
 
-        {/* Pie chart */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="font-semibold text-gray-900 mb-4">
+        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-stitch-1 p-5">
+          <h2 className="text-xl font-semibold text-on-surface mb-4">
             Shop Status Distribution
           </h2>
           {pieData.length > 0 ? (
             <ShopStatusPieChart data={pieData} />
           ) : (
-            <div className="h-[260px] flex items-center justify-center text-sm text-gray-400">
+            <div className="h-[260px] flex items-center justify-center text-sm text-on-surface-variant">
               No shops yet
             </div>
           )}
         </div>
       </div>
 
-      {/* Bottom row: recent shops + recent activity */}
+      {/* Bottom row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent shops */}
-        <div className="bg-white rounded-xl border border-gray-200">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Recent Shops</h2>
+        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-stitch-1 overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-outline-variant/30">
+            <h2 className="text-xl font-semibold text-on-surface">Recent Shops</h2>
             <Link
               href="/admin/shops"
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline font-medium font-[family-name:var(--font-inter)]"
             >
               View all
             </Link>
           </div>
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-outline-variant/30">
             {recentShops.map((shop) => (
               <div
                 key={shop.id}
                 className="flex items-center justify-between px-5 py-3"
               >
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-semibold text-on-surface">
                     {shop.name}
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-on-surface-variant">
                     by {shop.owner.name ?? "—"} · /s/{shop.slug}
                   </p>
                 </div>
@@ -166,7 +194,7 @@ export default async function AdminPage() {
                   <StatusBadge status={shop.status} />
                   <Link
                     href={`/admin/shops/${shop.id}`}
-                    className="text-xs text-blue-600 hover:underline"
+                    className="text-xs text-primary hover:underline font-medium"
                   >
                     Manage
                   </Link>
@@ -174,42 +202,43 @@ export default async function AdminPage() {
               </div>
             ))}
             {recentShops.length === 0 && (
-              <p className="px-5 py-6 text-center text-sm text-gray-400">
+              <p className="px-5 py-6 text-center text-sm text-on-surface-variant">
                 No shops yet
               </p>
             )}
           </div>
         </div>
 
-        {/* Recent activity */}
-        <div className="bg-white rounded-xl border border-gray-200">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Recent Activity</h2>
+        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-stitch-1 overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-outline-variant/30">
+            <h2 className="text-xl font-semibold text-on-surface">
+              Recent Activity
+            </h2>
             <Link
               href="/admin/logs"
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline font-medium font-[family-name:var(--font-inter)]"
             >
               View all
             </Link>
           </div>
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-outline-variant/30">
             {recentLogs.map((log) => (
               <div key={log.id} className="px-5 py-3">
                 <div className="flex items-center justify-between">
-                  <span className="inline-block px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-mono text-xs font-semibold">
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-primary-container/10 text-primary font-mono text-xs font-semibold">
                     {log.action}
                   </span>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-on-surface-variant">
                     {new Date(log.createdAt).toLocaleDateString("en-IN")}
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-on-surface-variant mt-1">
                   {log.targetType} · by {log.admin.email}
                 </p>
               </div>
             ))}
             {recentLogs.length === 0 && (
-              <p className="px-5 py-6 text-center text-sm text-gray-400">
+              <p className="px-5 py-6 text-center text-sm text-on-surface-variant">
                 No admin actions yet
               </p>
             )}

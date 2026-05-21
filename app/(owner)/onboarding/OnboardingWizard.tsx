@@ -25,7 +25,7 @@ export function OnboardingWizard({ initialStep, user, existingShop }: Props) {
   const props = { onNext: next, shopId, shopSlug };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+    <div>
       {step === 0 && <Step1Account user={user} onNext={() => next(1)} />}
       {step === 1 && <Step2BusinessType onNext={() => next(2)} />}
       {step === 2 && (

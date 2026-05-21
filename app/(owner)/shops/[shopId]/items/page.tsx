@@ -6,7 +6,11 @@ import { ArrowLeft, Plus } from "lucide-react";
 import { ItemList } from "./ItemList";
 import { canAddItem } from "@/lib/plan";
 
-export default async function ItemsPage({ params }: { params: Promise<{ shopId: string }> }) {
+export default async function ItemsPage({
+  params,
+}: {
+  params: Promise<{ shopId: string }>;
+}) {
   const { shopId } = await params;
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
@@ -26,36 +30,55 @@ export default async function ItemsPage({ params }: { params: Promise<{ shopId: 
   });
 
   const limitCheck = await canAddItem(shopId);
+  const limitDisplay =
+    limitCheck.limit === -1 ? "∞" : String(limitCheck.limit);
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="flex items-center justify-between mb-3">
-        <a href={`/shops/${shopId}`} className="inline-flex items-center gap-1.5 text-sm text-gray-700 hover:text-gray-900 font-medium">
-          <ArrowLeft className="w-4 h-4" />
-          {shop.name}
-        </a>
+    <div className="max-w-[1200px] mx-auto p-4 md:p-6 lg:p-8 font-[family-name:var(--font-jakarta)] text-on-surface">
+      <Link
+        href={`/shops/${shopId}`}
+        className="inline-flex items-center text-primary text-sm font-medium hover:underline mb-4 group"
+      >
+        <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+        {shop.name}
+      </Link>
+
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <div>
+          <h1 className="text-3xl md:text-[32px] font-bold tracking-tight text-on-surface mb-1">
+            Items
+          </h1>
+          <p className="font-[family-name:var(--font-inter)] text-sm text-on-surface-variant flex items-center gap-2">
+            <span
+              className={`w-2 h-2 rounded-full ${
+                limitCheck.allowed ? "bg-secondary" : "bg-error"
+              }`}
+            />
+            {limitCheck.current}/{limitDisplay} items used
+          </p>
+        </div>
         {limitCheck.allowed ? (
           <Link
             href={`/shops/${shopId}/items/new`}
-            className="inline-flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="bg-primary text-on-primary font-[family-name:var(--font-inter)] text-sm font-medium px-6 py-3 rounded-lg hover:bg-on-primary-fixed-variant transition-colors flex items-center gap-2 shadow-sm"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-5 h-5" strokeWidth={2.4} />
             Add Item
           </Link>
         ) : (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-right">
-            <p className="text-amber-800 text-xs font-medium">Item limit reached ({limitCheck.current}/{limitCheck.limit})</p>
-            <a href="mailto:sales@innovgeist.com" className="text-xs text-blue-600 hover:underline">Upgrade plan</a>
+          <div className="bg-error-container border border-error/20 rounded-lg px-4 py-2 text-right">
+            <p className="text-on-error-container text-xs font-medium">
+              Item limit reached ({limitCheck.current}/{limitCheck.limit})
+            </p>
+            <a
+              href="mailto:sales@innovgeist.com"
+              className="text-xs text-primary hover:underline font-medium"
+            >
+              Upgrade plan
+            </a>
           </div>
         )}
-      </div>
-
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Items</h1>
-        <p className="text-sm text-gray-500 mt-0.5">
-          {limitCheck.current}/{limitCheck.limit === -1 ? "∞" : limitCheck.limit} items used
-        </p>
-      </div>
+      </header>
 
       <ItemList
         shopId={shopId}

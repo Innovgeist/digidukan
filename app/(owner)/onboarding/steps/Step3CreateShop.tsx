@@ -3,24 +3,42 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { createShopAction, generateSlugAction, checkSlugAction, advanceOnboardingStep } from "@/lib/actions/shop";
+import { ArrowRight, Link2, Check, X } from "lucide-react";
+import {
+  createShopAction,
+  generateSlugAction,
+  checkSlugAction,
+  advanceOnboardingStep,
+} from "@/lib/actions/shop";
 
 const schema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  slug: z.string().min(2).max(60).regex(/^[a-z0-9-]+$/, "Only lowercase letters, numbers, hyphens"),
+  slug: z
+    .string()
+    .min(2)
+    .max(60)
+    .regex(/^[a-z0-9-]+$/, "Only lowercase letters, numbers, hyphens"),
   phone: z.string().min(10, "Enter a valid phone number"),
   whatsappNumber: z.string().min(10, "Enter a valid WhatsApp number"),
 });
 type FormData = z.infer<typeof schema>;
 
-interface Props { onNext: (shopId: string, slug: string) => void }
+interface Props {
+  onNext: (shopId: string, slug: string) => void;
+}
 
 export function Step3CreateShop({ onNext }: Props) {
   const [slugAvailable, setSlugAvailable] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { slug: "" },
   });
@@ -28,7 +46,6 @@ export function Step3CreateShop({ onNext }: Props) {
   const nameValue = watch("name");
   const slugValue = watch("slug");
 
-  // Auto-generate slug from name
   useEffect(() => {
     if (!nameValue || nameValue.length < 2) return;
     const timer = setTimeout(async () => {
@@ -38,7 +55,6 @@ export function Step3CreateShop({ onNext }: Props) {
     return () => clearTimeout(timer);
   }, [nameValue, setValue]);
 
-  // Check slug availability
   useEffect(() => {
     if (!slugValue || slugValue.length < 2) return;
     const timer = setTimeout(async () => {
@@ -62,63 +78,137 @@ export function Step3CreateShop({ onNext }: Props) {
   }
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-1">Create your shop</h2>
-      <p className="text-gray-500 text-sm mb-6">You can edit all details later.</p>
+    <div className="flex flex-col gap-6">
+      <div>
+        <h1 className="text-2xl font-semibold text-on-surface tracking-tight">
+          Create your shop
+        </h1>
+        <p className="text-base text-on-surface-variant mt-1">
+          Let&apos;s establish your digital storefront identity.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Shop Name *</label>
-          <input {...register("name")} placeholder="e.g. Ramesh Sweet House" className="input-field" />
-          {errors.name && <p className="err">{errors.name.message}</p>}
-        </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <Field label="Shop Name" error={errors.name?.message}>
+          <input
+            {...register("name")}
+            placeholder="e.g. Ramesh Sweet House"
+            className="stitch-input"
+          />
+        </Field>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Shop URL *
-            {slugAvailable === true && <span className="ml-2 text-green-600 text-xs">✓ available</span>}
-            {slugAvailable === false && <span className="ml-2 text-red-500 text-xs">✗ taken</span>}
+        <div className="flex flex-col gap-1.5">
+          <label className="font-[family-name:var(--font-inter)] text-sm font-medium text-on-surface flex items-center justify-between">
+            <span>Shop URL</span>
+            {slugAvailable === true && (
+              <span className="inline-flex items-center gap-1 text-secondary text-xs font-semibold">
+                <Check className="w-3.5 h-3.5" strokeWidth={3} /> available
+              </span>
+            )}
+            {slugAvailable === false && (
+              <span className="inline-flex items-center gap-1 text-error text-xs font-semibold">
+                <X className="w-3.5 h-3.5" strokeWidth={3} /> taken
+              </span>
+            )}
           </label>
-          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500">
-            <span className="bg-gray-50 text-gray-500 text-sm px-3 py-2 border-r border-gray-300 whitespace-nowrap">/s/</span>
-            <input {...register("slug")} placeholder="my-shop-name" className="flex-1 px-3 py-2 text-sm focus:outline-none" />
+          <div className="flex rounded-lg border border-outline-variant bg-surface-container-lowest overflow-hidden focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+            <span className="bg-surface-container-low text-on-surface-variant border-r border-outline-variant px-3 flex items-center text-sm whitespace-nowrap font-[family-name:var(--font-inter)]">
+              digidukan.com/s/
+            </span>
+            <input
+              {...register("slug")}
+              placeholder="your-shop"
+              className="flex-1 bg-transparent border-none px-3 py-2 text-base text-on-surface focus:ring-0 focus:outline-none"
+            />
           </div>
-          {errors.slug && <p className="err">{errors.slug.message}</p>}
+          {errors.slug && (
+            <p className="text-error text-xs mt-1">{errors.slug.message}</p>
+          )}
+          <div className="text-[12px] text-on-surface-variant mt-1 flex items-center gap-1 font-[family-name:var(--font-inter)]">
+            <Link2 className="w-3.5 h-3.5" strokeWidth={2} />
+            Preview: digidukan.com/s/{slugValue || "your-shop"}
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
-            <input {...register("phone")} placeholder="9876543210" className="input-field" />
-            {errors.phone && <p className="err">{errors.phone.message}</p>}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">WhatsApp *</label>
-            <input {...register("whatsappNumber")} placeholder="9876543210" className="input-field" />
-            {errors.whatsappNumber && <p className="err">{errors.whatsappNumber.message}</p>}
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Phone" error={errors.phone?.message}>
+            <input
+              {...register("phone")}
+              placeholder="9876543210"
+              className="stitch-input"
+            />
+          </Field>
+          <Field label="WhatsApp" error={errors.whatsappNumber?.message}>
+            <input
+              {...register("whatsappNumber")}
+              placeholder="9876543210"
+              className="stitch-input"
+            />
+          </Field>
         </div>
 
         {serverError && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-            <p className="text-red-600 text-sm">{serverError}</p>
+          <div className="bg-error-container border border-error/20 rounded-lg p-3">
+            <p className="text-on-error-container text-sm">{serverError}</p>
           </div>
         )}
 
-        <button
-          type="submit"
-          disabled={loading || slugAvailable === false}
-          className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? "Creating shop..." : "Create Shop →"}
-        </button>
+        <div className="pt-2 border-t border-surface-variant flex justify-end">
+          <button
+            type="submit"
+            disabled={loading || slugAvailable === false}
+            className="bg-primary text-on-primary font-[family-name:var(--font-inter)] text-sm font-medium h-12 px-10 rounded-lg flex items-center justify-center gap-2 hover:bg-on-primary-fixed-variant transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+          >
+            {loading ? "Creating shop..." : "Create Shop"}
+            {!loading && <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.4} />}
+          </button>
+        </div>
       </form>
 
       <style jsx>{`
-        .input-field { width: 100%; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.875rem; }
-        .input-field:focus { outline: none; box-shadow: 0 0 0 2px #3b82f6; }
-        .err { color: #ef4444; font-size: 0.75rem; margin-top: 0.25rem; }
+        :global(.stitch-input) {
+          width: 100%;
+          height: 48px;
+          padding: 0 16px;
+          border: 1px solid var(--color-outline-variant);
+          border-radius: 0.5rem;
+          background-color: var(--color-surface-container-lowest);
+          color: var(--color-on-surface);
+          font-size: 16px;
+          line-height: 1.6;
+          transition: all 200ms ease;
+          font-family: var(--font-jakarta);
+        }
+        :global(.stitch-input:focus) {
+          outline: none;
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 2px rgba(0, 74, 198, 0.2);
+        }
+        :global(.stitch-input::placeholder) {
+          color: var(--color-outline);
+          opacity: 0.7;
+        }
       `}</style>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="font-[family-name:var(--font-inter)] text-sm font-medium text-on-surface">
+        {label}
+      </label>
+      {children}
+      {error && <p className="text-error text-xs mt-1">{error}</p>}
     </div>
   );
 }

@@ -1,10 +1,14 @@
 "use client";
 import { useState } from "react";
-import { publishShopAction, advanceOnboardingStep } from "@/lib/actions/shop";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { CheckCircle2, Rocket, ExternalLink, PartyPopper } from "lucide-react";
+import { publishShopAction, advanceOnboardingStep } from "@/lib/actions/shop";
 
-interface Props { shopId: string | null; shopSlug: string | null }
+interface Props {
+  shopId: string | null;
+  shopSlug: string | null;
+}
 
 export function Step7Publish({ shopId, shopSlug }: Props) {
   const router = useRouter();
@@ -17,7 +21,11 @@ export function Step7Publish({ shopId, shopSlug }: Props) {
     setLoading(true);
     setError(null);
     const result = await publishShopAction(shopId);
-    if (result.error) { setError(result.error); setLoading(false); return; }
+    if (result.error) {
+      setError(result.error);
+      setLoading(false);
+      return;
+    }
     await advanceOnboardingStep(7);
     setPublished(true);
     setLoading(false);
@@ -25,32 +33,47 @@ export function Step7Publish({ shopId, shopSlug }: Props) {
 
   if (published) {
     return (
-      <div className="text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span className="text-3xl">🎉</span>
+      <div className="flex flex-col gap-6 text-center">
+        <div className="w-16 h-16 rounded-full bg-secondary-container/40 flex items-center justify-center mx-auto">
+          <PartyPopper className="w-8 h-8 text-secondary" strokeWidth={2} />
         </div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">Your shop is live!</h2>
-        <p className="text-gray-500 text-sm mb-6">Share this link with your customers.</p>
+        <div>
+          <h1 className="text-2xl font-semibold text-on-surface tracking-tight">
+            Your shop is live!
+          </h1>
+          <p className="text-base text-on-surface-variant mt-1">
+            Share this link with your customers.
+          </p>
+        </div>
+
         {shopSlug && (
-          <div className="bg-gray-50 rounded-lg p-3 mb-6 flex items-center gap-2">
-            <span className="text-sm text-gray-600 flex-1 text-left">/s/{shopSlug}</span>
-            <Link href={`/s/${shopSlug}`} target="_blank" className="text-blue-600 text-sm hover:underline whitespace-nowrap">
-              View →
+          <div className="bg-surface-container-low rounded-lg p-3 flex items-center gap-2">
+            <span className="text-sm text-on-surface flex-1 text-left font-[family-name:var(--font-inter)]">
+              digidukan.com/s/{shopSlug}
+            </span>
+            <Link
+              href={`/s/${shopSlug}`}
+              target="_blank"
+              className="text-primary text-sm hover:underline whitespace-nowrap inline-flex items-center gap-1 font-medium"
+            >
+              View
+              <ExternalLink className="w-3.5 h-3.5" strokeWidth={2} />
             </Link>
           </div>
         )}
-        <div className="flex gap-3">
+
+        <div className="flex flex-col sm:flex-row gap-3">
           {shopId && (
             <Link
               href={`/shops/${shopId}/qr`}
-              className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-lg font-medium hover:bg-gray-50 text-center text-sm"
+              className="flex-1 border border-primary text-primary h-12 rounded-lg font-medium hover:bg-surface-container-low text-center inline-flex items-center justify-center font-[family-name:var(--font-inter)] text-sm"
             >
               Download QR
             </Link>
           )}
           <button
             onClick={() => router.push("/dashboard")}
-            className="flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 text-sm"
+            className="flex-1 bg-primary text-on-primary h-12 rounded-lg font-medium hover:bg-on-primary-fixed-variant inline-flex items-center justify-center font-[family-name:var(--font-inter)] text-sm shadow-sm"
           >
             Go to Dashboard
           </button>
@@ -60,41 +83,53 @@ export function Step7Publish({ shopId, shopSlug }: Props) {
   }
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-1">You&apos;re almost there!</h2>
-      <p className="text-gray-500 text-sm mb-6">Publish your shop to make it accessible to customers.</p>
+    <div className="flex flex-col gap-6">
+      <div>
+        <h1 className="text-2xl font-semibold text-on-surface tracking-tight">
+          You&apos;re almost there!
+        </h1>
+        <p className="text-base text-on-surface-variant mt-1">
+          Publish your shop to make it accessible to customers.
+        </p>
+      </div>
 
-      <div className="bg-blue-50 rounded-xl p-4 mb-6 space-y-2">
-        <div className="flex items-center gap-2 text-sm text-blue-800">
-          <span>✓</span><span>Shop created</span>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-blue-800">
-          <span>✓</span><span>Category added</span>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-blue-800">
-          <span>✓</span><span>Items added</span>
-        </div>
+      <div className="bg-primary-container/10 border border-primary/20 rounded-xl p-4 space-y-2">
+        <ChecklistRow label="Shop created" />
+        <ChecklistRow label="Category added" />
+        <ChecklistRow label="Items added" />
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-          <p className="text-red-600 text-sm">{error}</p>
+        <div className="bg-error-container border border-error/20 rounded-lg p-3">
+          <p className="text-on-error-container text-sm">{error}</p>
         </div>
       )}
 
-      <button
-        onClick={handlePublish}
-        disabled={loading}
-        className="w-full bg-green-600 text-white py-2.5 rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 mb-3"
-      >
-        {loading ? "Publishing..." : "🚀 Publish My Shop"}
-      </button>
-      <button
-        onClick={() => router.push("/dashboard")}
-        className="w-full text-gray-500 text-sm hover:underline"
-      >
-        Skip for now
-      </button>
+      <div className="pt-2 border-t border-surface-variant flex flex-col gap-3">
+        <button
+          onClick={handlePublish}
+          disabled={loading}
+          className="w-full bg-secondary text-on-secondary h-12 rounded-lg font-medium hover:opacity-90 disabled:opacity-50 inline-flex items-center justify-center gap-2 font-[family-name:var(--font-inter)] text-sm shadow-sm"
+        >
+          <Rocket className="w-[18px] h-[18px]" strokeWidth={2.4} />
+          {loading ? "Publishing..." : "Publish My Shop"}
+        </button>
+        <button
+          onClick={() => router.push("/dashboard")}
+          className="w-full text-on-surface-variant text-sm hover:underline font-[family-name:var(--font-inter)]"
+        >
+          Skip for now
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ChecklistRow({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-2 text-sm text-primary font-medium">
+      <CheckCircle2 className="w-4 h-4" strokeWidth={2.4} />
+      <span>{label}</span>
     </div>
   );
 }

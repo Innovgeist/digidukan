@@ -10,6 +10,8 @@ import {
   LogOut,
   User,
   X,
+  Bell,
+  HelpCircle,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
@@ -23,25 +25,22 @@ function SidebarLink({
   label,
   icon: Icon,
   active,
-  onClick,
 }: {
   href: string;
   label: string;
   icon: typeof LayoutDashboard;
   active: boolean;
-  onClick?: () => void;
 }) {
   return (
     <Link
       href={href}
-      onClick={onClick}
-      className={`flex items-center gap-3 text-sm rounded-lg px-3 py-2.5 transition-colors ${
+      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-[family-name:var(--font-jakarta)] text-sm font-medium transition-colors ${
         active
-          ? "bg-blue-50 text-blue-700 font-medium"
-          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+          ? "bg-primary-container/10 text-primary border-r-4 border-primary"
+          : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
       }`}
     >
-      <Icon className="w-4 h-4 shrink-0" />
+      <Icon className="w-5 h-5 shrink-0" strokeWidth={active ? 2.4 : 2} />
       {label}
     </Link>
   );
@@ -62,10 +61,18 @@ function BottomTab({
     <Link
       href={href}
       className={`flex-1 flex flex-col items-center justify-center gap-0.5 h-full transition-colors ${
-        active ? "text-blue-600" : "text-gray-500 hover:text-gray-700"
+        active
+          ? "text-primary"
+          : "text-on-surface-variant/70 hover:text-on-surface-variant"
       }`}
     >
-      <Icon className={`w-[22px] h-[22px] ${active ? "" : "opacity-80"}`} strokeWidth={active ? 2.4 : 2} />
+      <span
+        className={`flex items-center justify-center px-3 py-1 rounded-xl ${
+          active ? "bg-primary-container/10" : ""
+        }`}
+      >
+        <Icon className="w-[22px] h-[22px]" strokeWidth={active ? 2.4 : 2} />
+      </span>
       <span className={`text-[11px] ${active ? "font-semibold" : "font-medium"}`}>
         {label}
       </span>
@@ -83,27 +90,40 @@ export function OwnerNav({ email }: { email: string }) {
   }
 
   const accountActive = accountOpen;
+  const initial = (email[0] ?? "?").toUpperCase();
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col w-60 bg-white border-r border-gray-200 p-5 h-screen sticky top-0 shrink-0">
-        <div className="mb-8 px-1">
-          <Link href="/dashboard" className="flex items-center gap-2">
+      {/* Desktop sidebar — 280px Stitch design */}
+      <aside className="hidden lg:flex flex-col w-[280px] border-r border-outline-variant/30 bg-surface-container-lowest shadow-sm h-screen sticky top-0 shrink-0 p-4 z-40 font-[family-name:var(--font-jakarta)]">
+        <div className="mb-8 px-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-primary-container/10 overflow-hidden flex items-center justify-center">
             <Image src="/logo.png" alt="DigiDukan" width={32} height={32} />
-            <span className="text-lg font-bold text-blue-600">DigiDukan</span>
-          </Link>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-primary">DigiDukan</h2>
+            <p className="font-[family-name:var(--font-inter)] text-[12px] font-semibold tracking-wide text-on-surface-variant">
+              Owner Console
+            </p>
+          </div>
         </div>
-        <nav className="flex flex-col gap-1 flex-1">
+
+        <nav className="flex-1 space-y-1">
           {navItems.map((item) => (
             <SidebarLink key={item.href} {...item} active={isActive(item)} />
           ))}
         </nav>
-        <div className="border-t border-gray-200 pt-4 mt-4">
-          <p className="text-xs text-gray-500 mb-3 truncate px-1">{email}</p>
+
+        <div className="mt-auto pt-4 border-t border-outline-variant/30 space-y-3">
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-9 h-9 rounded-full bg-primary-container/10 text-primary flex items-center justify-center font-semibold text-sm">
+              {initial}
+            </div>
+            <p className="text-xs text-on-surface-variant truncate flex-1">{email}</p>
+          </div>
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
-            className="flex items-center gap-2 text-sm text-gray-500 hover:text-red-500 transition-colors w-full px-1"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-surface-container-high text-on-surface text-sm font-medium hover:bg-surface-variant transition-colors"
           >
             <LogOut className="w-4 h-4" />
             Sign out
@@ -111,17 +131,30 @@ export function OwnerNav({ email }: { email: string }) {
         </div>
       </aside>
 
-      {/* Mobile top header — minimal */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 h-14 flex items-center justify-center px-4">
+      {/* Mobile top header */}
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-surface-container-lowest/80 backdrop-blur-md border-b border-outline-variant/30 shadow-sm h-14 flex items-center justify-between px-4 font-[family-name:var(--font-jakarta)]">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <Image src="/logo.png" alt="DigiDukan" width={28} height={28} />
-          <span className="text-base font-bold text-blue-600">DigiDukan</span>
+          <Image src="/logo.png" alt="DigiDukan" width={26} height={26} />
+          <span className="text-base font-extrabold tracking-tight text-primary">
+            DigiDukan
+          </span>
         </Link>
+        <div className="flex items-center gap-3 text-on-surface-variant">
+          <Bell className="w-5 h-5" strokeWidth={2} />
+          <HelpCircle className="w-5 h-5" strokeWidth={2} />
+          <button
+            onClick={() => setAccountOpen(true)}
+            className="w-8 h-8 rounded-full bg-primary-container/10 text-primary flex items-center justify-center font-semibold text-xs"
+            aria-label="Account"
+          >
+            {initial}
+          </button>
+        </div>
       </header>
 
       {/* Mobile bottom tab nav */}
       <nav
-        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 h-16 flex items-stretch"
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface-container-lowest border-t border-outline-variant/30 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] h-16 flex items-stretch font-[family-name:var(--font-jakarta)]"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         {navItems.map((item) => (
@@ -136,30 +169,42 @@ export function OwnerNav({ email }: { email: string }) {
         <button
           onClick={() => setAccountOpen(true)}
           className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
-            accountActive ? "text-blue-600" : "text-gray-500 hover:text-gray-700"
+            accountActive
+              ? "text-primary"
+              : "text-on-surface-variant/70 hover:text-on-surface-variant"
           }`}
         >
-          <User className="w-[22px] h-[22px]" strokeWidth={2} />
-          <span className="text-[11px] font-medium">Account</span>
+          <span
+            className={`flex items-center justify-center px-3 py-1 rounded-xl ${
+              accountActive ? "bg-primary-container/10" : ""
+            }`}
+          >
+            <User className="w-[22px] h-[22px]" strokeWidth={accountActive ? 2.4 : 2} />
+          </span>
+          <span
+            className={`text-[11px] ${accountActive ? "font-semibold" : "font-medium"}`}
+          >
+            Account
+          </span>
         </button>
       </nav>
 
-      {/* Account sheet (mobile only) */}
+      {/* Account sheet (mobile) */}
       {accountOpen && (
         <>
           <div
             className="lg:hidden fixed inset-0 z-50 bg-black/50 animate-fade-in"
             onClick={() => setAccountOpen(false)}
           />
-          <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl animate-slide-up">
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface-container-lowest rounded-t-2xl shadow-2xl animate-slide-up font-[family-name:var(--font-jakarta)]">
             <div className="flex justify-center pt-3 pb-1">
-              <span className="w-10 h-1 bg-gray-300 rounded-full" />
+              <span className="w-10 h-1 bg-outline-variant rounded-full" />
             </div>
-            <div className="flex items-center justify-between px-5 py-2 border-b border-gray-100">
-              <h3 className="font-semibold text-gray-900">Account</h3>
+            <div className="flex items-center justify-between px-5 py-2 border-b border-outline-variant/30">
+              <h3 className="font-semibold text-on-surface">Account</h3>
               <button
                 onClick={() => setAccountOpen(false)}
-                className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"
+                className="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:bg-surface-container"
                 aria-label="Close"
               >
                 <X className="w-4 h-4" />
@@ -169,19 +214,20 @@ export function OwnerNav({ email }: { email: string }) {
               className="p-5 space-y-3"
               style={{ paddingBottom: "calc(1.25rem + env(safe-area-inset-bottom))" }}
             >
-              <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold">
-                  {(email[0] ?? "?").toUpperCase()}
+              <div className="flex items-center gap-3 bg-surface-container-low rounded-xl px-4 py-3">
+                <div className="w-10 h-10 rounded-full bg-primary-container/10 text-primary flex items-center justify-center font-semibold">
+                  {initial}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs text-gray-500">Signed in as</p>
-                  <p className="text-sm font-medium text-gray-900 truncate">{email}</p>
+                  <p className="text-xs text-on-surface-variant">Signed in as</p>
+                  <p className="text-sm font-medium text-on-surface truncate">
+                    {email}
+                  </p>
                 </div>
               </div>
-
               <button
                 onClick={() => signOut({ callbackUrl: "/login" })}
-                className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 font-medium transition-colors"
+                className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-error-container text-on-error-container hover:opacity-90 font-medium transition-colors"
               >
                 <LogOut className="w-4 h-4" />
                 Sign out

@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Plus, Minus, Package } from "lucide-react";
 import {
   addItemToCollectionAction,
   removeItemFromCollectionAction,
 } from "@/lib/actions/collection";
-import Image from "next/image";
 
 interface ItemCard {
   id: string;
@@ -55,133 +57,152 @@ export function CollectionItemManager({
   return (
     <div className="space-y-8">
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-          <p className="text-red-600 text-sm">{error}</p>
-          <button onClick={() => setError(null)} className="text-xs text-red-400 hover:underline mt-1">
+        <div className="bg-error-container border border-error/20 rounded-lg p-3 flex items-start justify-between gap-2">
+          <p className="text-on-error-container text-sm">{error}</p>
+          <button
+            onClick={() => setError(null)}
+            className="text-xs hover:underline"
+          >
             Dismiss
           </button>
         </div>
       )}
 
-      {/* Current items in collection */}
+      {/* In collection */}
       <section>
-        <h2 className="text-base font-semibold text-gray-900 mb-3">
-          Items in &ldquo;{collectionName}&rdquo; ({collectionItems.length})
+        <h2 className="text-xl font-semibold text-on-surface mb-4">
+          Items in &ldquo;{collectionName}&rdquo;{" "}
+          <span className="text-on-surface-variant font-medium">
+            ({collectionItems.length})
+          </span>
         </h2>
         {collectionItems.length === 0 ? (
-          <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-            <p className="text-gray-500 text-sm">No items in this collection yet.</p>
-            <p className="text-gray-400 text-xs mt-1">Add items from the section below.</p>
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-stitch-1 p-10 text-center">
+            <p className="text-on-surface-variant text-sm">
+              No items in this collection yet.
+            </p>
+            <p className="text-outline text-xs mt-1">
+              Add items from the section below.
+            </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {collectionItems.map((item) => (
-              <div
+              <ItemRow
                 key={item.id}
-                className="bg-white rounded-xl border border-gray-200 p-3 flex items-center gap-3"
-              >
-                {item.imageUrl ? (
-                  <div className="relative w-12 h-12 flex-shrink-0">
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.name}
-                      fill
-                      className="object-cover rounded-lg"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-12 h-12 flex-shrink-0 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <span className="text-gray-400 text-xs">No img</span>
-                  </div>
-                )}
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                  {item.categoryName && (
-                    <p className="text-xs text-gray-400 truncate">{item.categoryName}</p>
-                  )}
-                  <p className="text-xs text-gray-600 font-medium">
-                    &#8377;{item.price.toFixed(2)}
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleRemove(item.id)}
-                  disabled={loadingId === item.id}
-                  className="flex-shrink-0 text-xs text-red-500 hover:underline border border-red-200 rounded px-2 py-1 disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  {loadingId === item.id ? "..." : "Remove"}
-                </button>
-              </div>
+                item={item}
+                action="remove"
+                loading={loadingId === item.id}
+                onClick={() => handleRemove(item.id)}
+              />
             ))}
           </div>
         )}
       </section>
 
-      {/* Available items to add */}
+      {/* Available */}
       <section>
-        <h2 className="text-base font-semibold text-gray-900 mb-3">
-          Add Items ({availableItems.length} available)
+        <h2 className="text-xl font-semibold text-on-surface mb-4">
+          Add Items{" "}
+          <span className="text-on-surface-variant font-medium">
+            ({availableItems.length} available)
+          </span>
         </h2>
         {availableItems.length === 0 ? (
-          <div className="bg-gray-50 rounded-xl border border-gray-200 p-8 text-center">
-            <p className="text-gray-500 text-sm">All shop items are already in this collection.</p>
-            <a
+          <div className="bg-surface-container-low rounded-xl border border-outline-variant/30 p-10 text-center">
+            <p className="text-on-surface-variant text-sm">
+              All shop items are already in this collection.
+            </p>
+            <Link
               href={`/shops/${shopId}/items`}
-              className="text-blue-500 text-xs hover:underline mt-1 inline-block"
+              className="text-primary text-sm font-medium hover:underline mt-1 inline-block font-[family-name:var(--font-inter)]"
             >
-              Manage items &rarr;
-            </a>
+              Manage items →
+            </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {availableItems.map((item) => (
-              <div
+              <ItemRow
                 key={item.id}
-                className="bg-white rounded-xl border border-gray-200 p-3 flex items-center gap-3"
-              >
-                {item.imageUrl ? (
-                  <div className="relative w-12 h-12 flex-shrink-0">
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.name}
-                      fill
-                      className="object-cover rounded-lg"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-12 h-12 flex-shrink-0 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <span className="text-gray-400 text-xs">No img</span>
-                  </div>
-                )}
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                  {item.categoryName && (
-                    <p className="text-xs text-gray-400 truncate">{item.categoryName}</p>
-                  )}
-                  <p className="text-xs text-gray-600 font-medium">
-                    &#8377;{item.price.toFixed(2)}
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleAdd(item.id)}
-                  disabled={loadingId === item.id}
-                  className="flex-shrink-0 text-xs text-blue-600 hover:underline border border-blue-200 rounded px-2 py-1 disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  {loadingId === item.id ? "..." : "Add"}
-                </button>
-              </div>
+                item={item}
+                action="add"
+                loading={loadingId === item.id}
+                onClick={() => handleAdd(item.id)}
+              />
             ))}
           </div>
         )}
       </section>
+    </div>
+  );
+}
 
-      <div className="pt-2">
-        <a
-          href={`/shops/${shopId}/collections`}
-          className="text-sm text-gray-500 hover:text-gray-700"
-        >
-          &larr; Back to Collections
-        </a>
+function ItemRow({
+  item,
+  action,
+  loading,
+  onClick,
+}: {
+  item: ItemCard;
+  action: "add" | "remove";
+  loading: boolean;
+  onClick: () => void;
+}) {
+  const isRemove = action === "remove";
+  return (
+    <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-stitch-1 p-3 flex items-center gap-3">
+      {item.imageUrl ? (
+        <div className="relative w-14 h-14 flex-shrink-0">
+          <Image
+            src={item.imageUrl}
+            alt={item.name}
+            fill
+            className="object-cover rounded-lg"
+            sizes="56px"
+          />
+        </div>
+      ) : (
+        <div className="w-14 h-14 flex-shrink-0 bg-surface-container rounded-lg flex items-center justify-center">
+          <Package className="w-5 h-5 text-outline" />
+        </div>
+      )}
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold text-on-surface truncate">
+          {item.name}
+        </p>
+        {item.categoryName && (
+          <p className="text-xs text-on-surface-variant truncate">
+            {item.categoryName}
+          </p>
+        )}
+        <p className="text-sm text-on-surface font-semibold mt-0.5 font-[family-name:var(--font-inter)]">
+          ₹{item.price.toFixed(2)}
+        </p>
       </div>
+      <button
+        onClick={onClick}
+        disabled={loading}
+        className={`flex-shrink-0 px-3 py-1.5 text-xs font-medium font-[family-name:var(--font-inter)] rounded-lg border transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 ${
+          isRemove
+            ? "border-error/30 text-error hover:bg-error-container/40"
+            : "border-primary/30 text-primary hover:bg-primary-container/10"
+        }`}
+      >
+        {loading ? (
+          "..."
+        ) : isRemove ? (
+          <>
+            <Minus className="w-3.5 h-3.5" strokeWidth={2.4} />
+            Remove
+          </>
+        ) : (
+          <>
+            <Plus className="w-3.5 h-3.5" strokeWidth={2.4} />
+            Add
+          </>
+        )}
+      </button>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { ImagePlus, Plus, Trash2, X, Loader2 } from "lucide-react";
+import { ImagePlus, Plus, Trash2, X, Loader2, ArrowRight } from "lucide-react";
 import { createItemAction } from "@/lib/actions/item";
 import { advanceOnboardingStep } from "@/lib/actions/shop";
 import { uploadImageAction } from "@/lib/actions/upload";
@@ -114,36 +114,46 @@ export function Step6Items({ onNext, shopId }: Props) {
   const allUploading = items.some((it) => it.uploading);
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-1">Add your first items</h2>
-      <p className="text-gray-500 text-sm mb-5">
-        Add 1–3 items with photos to get started. You can add more anytime later.
-      </p>
+    <div className="flex flex-col gap-6">
+      <div>
+        <h1 className="text-2xl font-semibold text-on-surface tracking-tight">
+          Add your first items
+        </h1>
+        <p className="text-base text-on-surface-variant mt-1">
+          Add 1–3 items with photos to get started. You can add more later.
+        </p>
+      </div>
 
-      <div className="space-y-3 mb-4">
+      <div className="flex flex-col gap-3">
         {items.map((item, i) => (
           <div
             key={i}
-            className="border border-gray-200 rounded-xl p-3 bg-white flex gap-3 items-start"
+            className="border border-outline-variant rounded-xl p-3 bg-surface-container-lowest flex gap-3 items-start shadow-stitch-1"
           >
-            {/* Image picker */}
             <button
               type="button"
               onClick={() => !item.uploading && fileRefs.current[i]?.click()}
               disabled={item.uploading}
               className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors ${
                 item.imageUrl
-                  ? "border-gray-200"
-                  : "border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                  ? "border-outline-variant"
+                  : "border-dashed border-outline-variant hover:border-primary hover:bg-primary-container/10"
               }`}
             >
               {item.uploading ? (
-                <span className="absolute inset-0 flex items-center justify-center bg-white">
-                  <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+                <span className="absolute inset-0 flex items-center justify-center bg-surface-container-lowest">
+                  <Loader2 className="w-5 h-5 text-primary animate-spin" />
                 </span>
               ) : item.imageUrl ? (
                 <>
-                  <Image src={item.imageUrl} alt="" fill className="object-cover" sizes="80px" unoptimized />
+                  <Image
+                    src={item.imageUrl}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="80px"
+                    unoptimized
+                  />
                   <span
                     role="button"
                     tabIndex={0}
@@ -164,9 +174,11 @@ export function Step6Items({ onNext, shopId }: Props) {
                   </span>
                 </>
               ) : (
-                <span className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 text-gray-400">
+                <span className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 text-outline">
                   <ImagePlus className="w-5 h-5" strokeWidth={1.8} />
-                  <span className="text-[10px] font-medium">Photo</span>
+                  <span className="text-[10px] font-medium font-[family-name:var(--font-inter)]">
+                    Photo
+                  </span>
                 </span>
               )}
             </button>
@@ -180,23 +192,24 @@ export function Step6Items({ onNext, shopId }: Props) {
               onChange={(e) => handleImage(i, e.target.files?.[0])}
             />
 
-            {/* Fields */}
             <div className="flex-1 space-y-2 min-w-0">
               <input
                 value={item.name}
                 onChange={(e) => patchItem(i, { name: e.target.value })}
                 placeholder={`Item ${i + 1} name`}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-outline-variant rounded-lg px-3 h-11 text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 bg-surface-container-lowest"
               />
               <div className="flex items-center gap-2">
-                <div className="flex-1 flex items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500">
-                  <span className="bg-gray-50 text-gray-500 text-sm px-3 py-2.5 border-r border-gray-300">₹</span>
+                <div className="flex-1 flex items-center border border-outline-variant rounded-lg overflow-hidden focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+                  <span className="bg-surface-container-low text-on-surface-variant text-base px-3 h-11 flex items-center border-r border-outline-variant">
+                    ₹
+                  </span>
                   <input
                     inputMode="decimal"
                     value={item.price}
                     onChange={(e) => patchItem(i, { price: e.target.value })}
                     placeholder="Price"
-                    className="flex-1 px-2 py-2.5 text-sm focus:outline-none w-0"
+                    className="flex-1 px-2 h-11 text-base focus:outline-none w-0 bg-surface-container-lowest"
                   />
                 </div>
                 {items.length > 1 && (
@@ -204,14 +217,14 @@ export function Step6Items({ onNext, shopId }: Props) {
                     type="button"
                     onClick={() => removeItem(i)}
                     aria-label="Remove item"
-                    className="w-10 h-10 rounded-lg border border-gray-200 text-gray-400 hover:text-red-500 hover:bg-red-50 hover:border-red-200 flex items-center justify-center flex-shrink-0 transition-colors"
+                    className="w-11 h-11 rounded-lg border border-outline-variant text-outline hover:text-error hover:bg-error-container hover:border-error/40 flex items-center justify-center flex-shrink-0 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 )}
               </div>
               {item.uploadError && (
-                <p className="text-xs text-red-500">{item.uploadError}</p>
+                <p className="text-xs text-error">{item.uploadError}</p>
               )}
             </div>
           </div>
@@ -221,7 +234,7 @@ export function Step6Items({ onNext, shopId }: Props) {
       {items.length < 3 && (
         <button
           onClick={addItem}
-          className="w-full inline-flex items-center justify-center gap-1.5 text-blue-600 hover:bg-blue-50 text-sm font-medium py-2.5 rounded-lg mb-4 transition-colors"
+          className="w-full inline-flex items-center justify-center gap-1.5 text-primary hover:bg-primary-container/10 text-sm font-medium font-[family-name:var(--font-inter)] py-2.5 rounded-lg transition-colors"
         >
           <Plus className="w-4 h-4" strokeWidth={2.4} />
           Add another item
@@ -229,18 +242,27 @@ export function Step6Items({ onNext, shopId }: Props) {
       )}
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-          <p className="text-red-600 text-sm">{error}</p>
+        <div className="bg-error-container border border-error/20 rounded-lg p-3">
+          <p className="text-on-error-container text-sm">{error}</p>
         </div>
       )}
 
-      <button
-        onClick={handleSubmit}
-        disabled={loading || allUploading}
-        className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-      >
-        {loading ? "Saving items..." : allUploading ? "Wait for image upload…" : "Save & Continue →"}
-      </button>
+      <div className="pt-2 border-t border-surface-variant flex justify-end">
+        <button
+          onClick={handleSubmit}
+          disabled={loading || allUploading}
+          className="bg-primary text-on-primary font-[family-name:var(--font-inter)] text-sm font-medium h-12 px-10 rounded-lg flex items-center justify-center gap-2 hover:bg-on-primary-fixed-variant transition-colors shadow-sm disabled:opacity-50 w-full sm:w-auto"
+        >
+          {loading
+            ? "Saving items..."
+            : allUploading
+              ? "Wait for image upload…"
+              : "Save & Continue"}
+          {!loading && !allUploading && (
+            <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.4} />
+          )}
+        </button>
+      </div>
     </div>
   );
 }

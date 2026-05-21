@@ -1,6 +1,8 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect, notFound } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { CollectionItemManager } from "./CollectionItemManager";
 
 export default async function CollectionDetailPage({
@@ -17,20 +19,21 @@ export default async function CollectionDetailPage({
     include: {
       itemCollections: {
         include: {
-          item: {
-            include: { category: true },
-          },
+          item: { include: { category: true } },
         },
       },
       shop: true,
     },
   });
 
-  if (!collection || collection.deletedAt || collection.shop.ownerId !== session.user.id) {
+  if (
+    !collection ||
+    collection.deletedAt ||
+    collection.shop.ownerId !== session.user.id
+  ) {
     notFound();
   }
 
-  // Items not yet in this collection
   const availableItems = await prisma.item.findMany({
     where: {
       shopId,
@@ -58,19 +61,23 @@ export default async function CollectionDetailPage({
   }));
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="flex items-center gap-2 mb-1">
-        <a
-          href={`/shops/${shopId}/collections`}
-          className="text-sm text-gray-500 hover:text-gray-700"
-        >
-          &larr; Collections
-        </a>
-      </div>
+    <div className="max-w-[1200px] mx-auto p-4 md:p-6 lg:p-8 font-[family-name:var(--font-jakarta)] text-on-surface">
+      <Link
+        href={`/shops/${shopId}/collections`}
+        className="inline-flex items-center text-primary text-sm font-medium hover:underline mb-4 group"
+      >
+        <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+        Back to Collections
+      </Link>
+
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">{collection.name}</h1>
+        <h1 className="text-3xl md:text-[32px] font-bold tracking-tight text-on-surface mb-1">
+          {collection.name}
+        </h1>
         {collection.description && (
-          <p className="text-sm text-gray-500 mt-1">{collection.description}</p>
+          <p className="text-base text-on-surface-variant">
+            {collection.description}
+          </p>
         )}
       </div>
 

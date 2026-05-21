@@ -38,9 +38,9 @@ export default async function OwnerLayout({
       )}
       {impersonation?.targetName && <div className="h-10" aria-hidden="true" />}
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 font-[family-name:var(--font-jakarta)] text-on-background">
         <OwnerNav email={session.user.email ?? ""} />
-        <main className="flex-1 overflow-auto bg-gray-50 lg:h-screen pt-14 pb-16 lg:pt-0 lg:pb-0">
+        <main className="flex-1 overflow-auto bg-bg-app lg:h-screen pt-14 pb-20 lg:pt-0 lg:pb-0">
           {children}
         </main>
       </div>
