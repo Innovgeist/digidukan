@@ -106,6 +106,27 @@ export default function SignupPage() {
           )}
         </div>
 
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-1">
+            Invitation code
+          </label>
+          <input
+            {...register("inviteCode")}
+            type="text"
+            autoComplete="off"
+            placeholder="Enter your invite code"
+            className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <p className="text-slate-400 text-xs mt-1">
+            Ask your DigiDukan contact for this code.
+          </p>
+          {errors.inviteCode && (
+            <p className="text-red-400 text-xs mt-1">
+              {errors.inviteCode.message}
+            </p>
+          )}
+        </div>
+
         {serverError && (
           <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
             <p className="text-red-400 text-sm">{serverError}</p>

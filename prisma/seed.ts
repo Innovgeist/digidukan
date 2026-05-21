@@ -6,6 +6,14 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Seeding database...");
 
+  // ─── App Settings ───────────────────────────────────────────────────────────
+  await prisma.appSetting.upsert({
+    where: { key: "signupCode" },
+    update: {},
+    create: { key: "signupCode", value: "DUKAN2026" },
+  });
+  console.log("✅ Signup code seeded (default: DUKAN2026)");
+
   // ─── Plans ──────────────────────────────────────────────────────────────────
   const freePlan = await prisma.plan.upsert({
     where: { name: "Free" },

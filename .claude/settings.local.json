@@ -37,7 +37,9 @@
       "Bash(head -1 app/\\\\\\(owner\\\\\\)/shops/page.tsx app/\\\\\\(owner\\\\\\)/shops/[shopId]/items/page.tsx app/\\\\\\(owner\\\\\\)/shops/[shopId]/categories/page.tsx app/\\\\\\(owner\\\\\\)/shops/[shopId]/collections/page.tsx app/\\\\\\(owner\\\\\\)/shops/[shopId]/collections/[collectionId]/page.tsx app/\\\\\\(owner\\\\\\)/shops/[shopId]/analytics/page.tsx app/\\\\\\(owner\\\\\\)/shops/[shopId]/settings/page.tsx app/\\\\\\(owner\\\\\\)/shops/[shopId]/qr/page.tsx)",
       "Bash(curl *)",
       "Bash(grep -vE \"^\\\\s*$\")",
-      "Bash(netstat -ano)"
+      "Bash(netstat -ano)",
+      "PowerShell(Stop-Process *)",
+      "Bash(npx tsx *)"
     ]
   }
 }

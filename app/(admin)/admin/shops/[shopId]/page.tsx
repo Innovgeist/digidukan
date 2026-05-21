@@ -99,6 +99,7 @@ export default async function AdminShopDetailPage({
         shopId={shopId}
         shopStatus={shop.status}
         shopName={shop.name}
+        shopIsPremium={shop.isPremium}
         currentPlanName={shop.subscription?.plan.name ?? "Free"}
         plans={plans}
         currentPlanId={subscription?.planId}

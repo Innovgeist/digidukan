@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Inter:wght@400;500;600&amp;family=Cormorant+Garamond:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#81b9a4",
+                    "on-surface-variant": "#404945",
+                    "on-secondary-fixed-variant": "#802827",
+                    "secondary-fixed": "#ffdad7",
+                    "surface-container-high": "#eee7da",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#16503f",
+                    "surface-tint": "#326856",
+                    "outline-variant": "#c0c9c3",
+                    "surface-bright": "#fff9ee",
+                    "inverse-on-surface": "#f7f0e2",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-background": "#1e1b13",
+                    "on-tertiary-fixed": "#261900",
+                    "tertiary-fixed": "#ffdea5",
+                    "surface-dim": "#e0d9cc",
+                    "on-tertiary-container": "#d0a758",
+                    "outline": "#707974",
+                    "primary-fixed-dim": "#9ad2bd",
+                    "on-tertiary-fixed-variant": "#5d4200",
+                    "on-secondary-fixed": "#410004",
+                    "inverse-surface": "#333027",
+                    "on-error-container": "#93000a",
+                    "primary": "#003226",
+                    "surface": "#fff9ee",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#b5efd8",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#002117",
+                    "tertiary-fixed-dim": "#ebc06e",
+                    "surface-container": "#f4eddf",
+                    "tertiary-container": "#563d00",
+                    "primary-container": "#0e4a3a",
+                    "tertiary": "#3a2800",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#762120",
+                    "surface-variant": "#e9e2d4",
+                    "inverse-primary": "#9ad2bd",
+                    "surface-container-highest": "#e9e2d4",
+                    "secondary-container": "#ff8982",
+                    "secondary-fixed-dim": "#ffb3ae",
+                    "surface-container-low": "#faf3e5",
+                    "secondary": "#9f3f3c",
+                    "on-surface": "#1e1b13",
+                    "background": "#fff9ee"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding-mobile": "20px",
+                    "section-gap": "80px",
+                    "gutter": "24px",
+                    "unit": "8px",
+                    "container-padding-desktop": "64px"
+            },
+            "fontFamily": {
+                    "section-label": ["EB Garamond"],
+                    "display-lg": ["EB Garamond"],
+                    "headline-md": ["EB Garamond"],
+                    "body-md": ["Inter"],
+                    "display-lg-mobile": ["EB Garamond"],
+                    "numeral-tabular": ["Inter"],
+                    "currency-symbol": ["EB Garamond"],
+                    "body-lg": ["Inter"],
+                    "cormorant": ["Cormorant Garamond"]
+            },
+            "fontSize": {
+                    "section-label": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "display-lg-mobile": ["36px", {"lineHeight": "44px", "fontWeight": "600"}],
+                    "numeral-tabular": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                    "currency-symbol": "1.1em",
+                    "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.damask-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCaEGMDCTa7nwVjdKO1yMOoALBIe8vlusY0ahMK5CMwA6Ek2n4awaqPopzTaXlEUVvqhDkWztra_djf1CxIDgxtKm3IsFaC2gZmG2fRw0RWjmXZVWgNmUiOKfAmkSW6QSP8MmPZBsr46GdaqnsLjCUI1N39_xYCZSgZiKdFapwwqZF3mDZ6LZZk9gKT2leFpfWFbI8ByKrCRkdAcpo1WWZrrIsgdygPQiXJaHbhuJpgMMSk-vRU__AvE00xE9Xsuu1z7L21lryQIVY);
+    opacity: 0.06
+    }
+.brass-divider {
+    position: relative;
+    height: 1px;
+    background-color: #d0a758;
+    /* tertiary-container/brass */
+    width: 100%;
+    margin: 40px 0
+    }
+.brass-divider::after {
+    content: "◆";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff9ee;
+    padding: 0 12px;
+    color: #d0a758;
+    font-size: 14px
+    }
+.cartouche-frame {
+    border: 1px solid #d0a758;
+    position: relative;
+    padding: 16px
+    }
+.cartouche-frame::before, .cartouche-frame::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 1px solid #d0a758;
+    background: #fff9ee
+    }
+.corner-tl {
+    top: -4px;
+    left: -4px
+    }
+.corner-tr {
+    top: -4px;
+    right: -4px
+    }
+.corner-bl {
+    bottom: -4px;
+    left: -4px
+    }
+.corner-br {
+    bottom: -4px;
+    right: -4px
+    }
+.item-card-premium {
+    border: 2px double #003226;
+    /* emerald */
+    position: relative
+    }
+.brass-cap {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #d0a758;
+    background: #fff9ee
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- Damask Overlay -->
+<div class="fixed inset-0 pointer-events-none damask-texture z-0"></div>
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-primary h-20 flex items-center justify-between px-container-padding-mobile shadow-sm">
+<div class="flex items-center gap-4">
+<!-- Ivory Cartouche Logo Area -->
+<div class="bg-surface-bright px-4 py-2 border border-tertiary-container relative">
+<span class="font-cormorant text-primary font-bold text-xl tracking-tight">The Heritage Collection</span>
+<div class="absolute -top-1 -left-1 w-2 h-2 bg-tertiary-container"></div>
+<div class="absolute -bottom-1 -right-1 w-2 h-2 bg-tertiary-container"></div>
+</div>
+</div>
+<div class="flex items-center gap-4 text-on-primary">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="material-symbols-outlined">menu</span>
+</div>
+</header>
+<main class="relative z-10">
+<!-- Hero Section -->
+<section class="w-full">
+<div class="aspect-[4/3] w-full overflow-hidden relative">
+<img alt="Heritage Collection Cover" class="w-full h-full object-cover" data-alt="A lush, high-end close-up photograph of a vintage heritage porcelain tea set on a dark green velvet tablecloth. Soft morning light streams through a tall conservatory window, casting gentle shadows. The color palette features deep emeralds, warm ivory tones, and rich brass accents, creating an atmosphere of quiet, timeless luxury and established heritage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1NmJ0CGYWrPnoqdAPFJE9hzEMUaN8Co8c3Gj9amPUfsojxBmd2B6rKVJIFbYQqzCkym9s3hJtx_K-cYwN-oB-PWLKng6fR3tWFR0TaQNLQIG5uD_VkSn_N4CyiPvi9ZewyRqowGI2Kua-GeOqmOw4ofFsYtJrmn4Cw972CHuOXAk28f3hlMCLUNz9BM1YORR0DGnbZ8mVKZ1Mqu4Io4Rd8ceQ6oReaXiHDUoRnxev7hson6S25fssY7hiI5HKGAQkNPCbygJkZF8"/>
+<div class="absolute bottom-6 left-6">
+<div class="bg-surface-bright border border-tertiary-container px-3 py-1 flex items-center gap-2 shadow-lg">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-section-label text-on-surface uppercase text-[10px]">Open for Bespoke Orders</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Specials Section -->
+<section class="px-container-padding-mobile mt-section-gap">
+<div class="text-center mb-10">
+<h2 class="font-display-lg-mobile text-display-lg-mobile italic text-primary">Today's Specialities</h2>
+<div class="flex justify-center mt-2">
+<div class="w-12 h-[1px] bg-tertiary-container"></div>
+</div>
+</div>
+<!-- Cartouche Framed Featured -->
+<div class="cartouche-frame bg-surface-container-low shadow-sm mb-12">
+<div class="corner-tl"></div><div class="corner-tr"></div><div class="corner-bl"></div><div class="corner-br"></div>
+<div class="flex flex-col gap-4">
+<div class="aspect-video overflow-hidden">
+<img alt="Featured Scent" class="w-full h-full object-cover" data-alt="An exquisite, professionally lit close-up of a premium artisanal fragrance bottle made of heavy crystal with a brass stopper. It sits on a polished mahogany surface reflecting the warm ambient light. The scene is styled with dried heritage herbs and a velvet ribbon, embodying a stately minimalist aesthetic with rich, tactile textures and a serene, exclusive mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY807_k4B2CA4bH8UNMmkOKE50XKxNcL1ygbuprSf880I7Nu8Om6UnTN6hSs0EOTOkb4uUBMb2phoBASRYU5iV4TLbpvS0aHyuAXNRu54AWKrZsouQNuRWDblfeV6NCXBxv5zeAsUGz3p1PDxpxykH6xT0ijrnuO-0Nn9kzXHUO9EPcSseSC0V-nsSljmzGuTSqR-jRDYwFN6__q7TQCDaRNJ_0QUEZwu_Axfo2DNZPqJip5BcdKmggsNkrTvQBVK5ojdkJPkXFUo"/>
+</div>
+<div class="text-center py-2">
+<h3 class="font-headline-md text-headline-md text-primary">Signature Oakmoss &amp; Amber</h3>
+<p class="font-section-label text-on-surface-variant italic mt-1">Limited Seasonal Release</p>
+</div>
+</div>
+</div>
+<!-- Brass Rule Divider -->
+<div class="brass-divider"></div>
+<!-- 2-Column Item Grid -->
+<div class="grid grid-cols-2 gap-gutter mt-12 mb-20">
+<!-- Item 1 -->
+<div class="item-card-premium bg-surface-container-lowest p-2 shadow-none">
+<div class="brass-cap -top-1 -left-1"></div>
+<div class="brass-cap -bottom-1 -right-1"></div>
+<div class="aspect-square overflow-hidden mb-3">
+<img alt="Heritage Candle" class="w-full h-full object-cover" data-alt="A refined architectural detail of a heritage room featuring emerald green walls and ornate brass trimmings. A single ivory candle glows softly in the foreground. High-key lighting highlights the rich textures of the wall and the metallic sheen of the brass. The image is captured in a minimalist, prestigious style reflecting a traditional digital concierge experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYqPLL1zV0325CeuHD2MNMt0-p6hZ_2iblu7Imtdt63zu3d1E3YXzG0oEVSLQCrs_aDLQIyB9LhypHRHsCh9NeDTdj8FVtfRHiGUjozNgPb5QyPwjcAv-daIDH0o1dJKMgKqB5NSFthol5Ae-vYeGiXwLJGHrItZhK7ViJ4SHjgz7GbInIkwO2Y8jn0NTPq740FxDNKlXNLvBqqkIwl2tuMZ-3bHsKwbpbOqdef3zvcTjXoZZpmEcnkAwsXXhHtPb_tTBsU5Ddz8k"/>
+</div>
+<div class="px-1 text-center">
+<h4 class="font-section-label text-primary uppercase text-[12px] leading-tight h-10 flex items-center justify-center">Victorian Parlour Mist</h4>
+<p class="font-numeral-tabular text-secondary font-bold my-2">£42.00</p>
+<button class="w-full bg-secondary text-on-primary py-2 text-[10px] font-section-label tracking-widest hover:bg-on-secondary-container transition-colors uppercase">
+                            Add to Order
+                        </button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="item-card-premium bg-surface-container-lowest p-2 shadow-none">
+<div class="brass-cap -top-1 -left-1"></div>
+<div class="brass-cap -bottom-1 -right-1"></div>
+<div class="aspect-square overflow-hidden mb-3">
+<img alt="Leather Journal" class="w-full h-full object-cover" data-alt="A close-up of a bespoke leather-bound journal with a paisley embossed pattern on the cover. The journal rests on a cream-colored damask textile background with warm, golden-hour lighting. The scene focuses on the tactile quality of the leather and the intricate embossed details, presented in a stately minimalist style with a sophisticated heritage palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzTPMJ4xHJBkCZRiwVSS9E2lOA0wHjYDNac6qNERjJ6wgNuRE7cs_ZGdqcI5vSzIgLgO-oRKgWD5pFlpunc8tFK-g8NwNILSKAdVW1TE_FyXT-gw-Ir3Fw6usTSkNIrSN6gONSW7gGSdKhsmPrTix4_10O4J8nHhnB-k8I4rdxU_PeDHf4ZYumIf2iQ4IjNYF8anZh8LtFpcxilKKFJNm1azk0RKCpJDw3dGQk8ZWnhUc42dDbLsROZK_a3SxGxJ_cyMKsgUhKzqE"/>
+</div>
+<div class="px-1 text-center">
+<h4 class="font-section-label text-primary uppercase text-[12px] leading-tight h-10 flex items-center justify-center">Embossed Ledger No. 4</h4>
+<p class="font-numeral-tabular text-secondary font-bold my-2">£85.00</p>
+<button class="w-full bg-secondary text-on-primary py-2 text-[10px] font-section-label tracking-widest hover:bg-on-secondary-container transition-colors uppercase">
+                            Add to Order
+                        </button>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="item-card-premium bg-surface-container-lowest p-2 shadow-none">
+<div class="brass-cap -top-1 -left-1"></div>
+<div class="brass-cap -bottom-1 -right-1"></div>
+<div class="aspect-square overflow-hidden mb-3">
+<img alt="Brass Scales" class="w-full h-full object-cover" data-alt="An artistic composition of antique brass weighing scales on a marble countertop in a high-end heritage shop. The lighting is soft and focused, emphasizing the polished metal and the white marble veins. The background is a blurred dark emerald, creating depth and a sense of exclusive craftsmanship and unhurried tradition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLZ4dVmNR6F2inTqojNQaWPXAhj63bHzHVAx6-8JLuvoTLsbc_JQfh3s0ctqg-VRK01gWqHooIsBgOjF_MES-IU9MbTXX-ulJpC_-ubABfBMOXo6ocbT5ZECwI9rmsp6xCEyTT84EVQVG78XnAdU2lkR426jVN3_1m_n3EgibitEAJi_QlLoQOYW338Hh-DmMHTa8U98ldC0QX4y8GdRx8hxDu4NiexJdaw7S4X0sMt1rd2XLghx_gLBvP_ULEHtQfsG8Yhmp0LNg"/>
+</div>
+<div class="px-1 text-center">
+<h4 class="font-section-label text-primary uppercase text-[12px] leading-tight h-10 flex items-center justify-center">Merchant's Scale Mini</h4>
+<p class="font-numeral-tabular text-secondary font-bold my-2">£120.00</p>
+<button class="w-full bg-secondary text-on-primary py-2 text-[10px] font-section-label tracking-widest hover:bg-on-secondary-container transition-colors uppercase">
+                            Add to Order
+                        </button>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="item-card-premium bg-surface-container-lowest p-2 shadow-none">
+<div class="brass-cap -top-1 -left-1"></div>
+<div class="brass-cap -bottom-1 -right-1"></div>
+<div class="aspect-square overflow-hidden mb-3">
+<img alt="Handmade Paper" class="w-full h-full object-cover" data-alt="A stack of premium, hand-crafted paper with rough deckled edges tied together with a simple jute twine. The scene is shot from a high angle on a sunlit ivory wooden table. The minimalist composition highlights the organic texture of the paper and the quiet, artisanal luxury of the product within a heritage-themed setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVcvYTgw_reXHmG1Q2G-RtvKPu6Ev32_5iybsTGBZ3mSV3z89bdyVFZbGOGE9_RQWa6sd58zuMoFVnsDES8LJJTTDfCyGSx9e0H_NdF6AUGaON4vMXCQrETGcmM6_hphyjYgB76lDWhwDP6VED5S8S3ucxtK6jcsDTlJXu-6t5_bKbGVRl75lKd6qnE7yfkoSpqE1XQAj8cvnmizE5v9BlvLtWaxIEv-uDRG5Be7ZfOwdN9vX99HjHHWLoiaera1e527CWgda8d-w"/>
+</div>
+<div class="px-1 text-center">
+<h4 class="font-section-label text-primary uppercase text-[12px] leading-tight h-10 flex items-center justify-center">Deckled Edge Stationery</h4>
+<p class="font-numeral-tabular text-secondary font-bold my-2">£28.00</p>
+<button class="w-full bg-secondary text-on-primary py-2 text-[10px] font-section-label tracking-widest hover:bg-on-secondary-container transition-colors uppercase">
+                            Add to Order
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-low border-t border-outline-variant flex justify-around items-center px-4 py-3 pb-safe">
+<div class="flex flex-col items-center justify-center text-primary font-bold">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">storefront</span>
+<span class="font-section-label text-[10px]">Boutique</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined">search</span>
+<span class="font-section-label text-[10px]">Search</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-section-label text-[10px]">Wishlist</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined">person</span>
+<span class="font-section-label text-[10px]">Account</span>
+</div>
+</nav>
+<!-- Footer Space for Scroll -->
+<footer class="h-32 bg-primary flex items-center justify-center px-container-padding-mobile">
+<p class="font-section-label text-on-primary text-[10px] tracking-[0.2em] uppercase">EST. 1894 — DIGIDUKAN HERITAGE</p>
+</footer>
+<script>
+        // Simple micro-interaction for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.95)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

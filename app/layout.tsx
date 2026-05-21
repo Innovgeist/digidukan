@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist, Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Fraunces, Geist, Plus_Jakarta_Sans, Inter, EB_Garamond } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
@@ -30,6 +30,14 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
+const ebGaramond = EB_Garamond({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-heritage",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
   title: "DigiDukan — Digital Storefront for Local Businesses",
   description:
@@ -48,7 +56,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${geist.variable} ${jakarta.variable} ${inter.variable}`}
+      className={`${fraunces.variable} ${geist.variable} ${jakarta.variable} ${inter.variable} ${ebGaramond.variable}`}
     >
       <body className="font-sans antialiased">
         {children}

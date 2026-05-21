@@ -173,6 +173,36 @@ export async function publishShopAction(shopId: string) {
   return { success: true };
 }
 
+export async function togglePremiumAction(shopId: string, isPremium: boolean) {
+  const adminId = await requireAdmin();
+
+  const shop = await prisma.shop.findUnique({
+    where: { id: shopId },
+    select: { id: true, slug: true, deletedAt: true, isPremium: true },
+  });
+  if (!shop || shop.deletedAt) return { error: "Shop not found." };
+
+  await prisma.shop.update({
+    where: { id: shopId },
+    data: { isPremium },
+  });
+
+  await prisma.adminActionLog.create({
+    data: {
+      adminId,
+      action: "TOGGLE_PREMIUM",
+      targetType: "Shop",
+      targetId: shopId,
+      metadata: { isPremium, previous: shop.isPremium },
+    },
+  });
+
+  revalidatePath(`/admin/shops/${shopId}`);
+  revalidatePath(`/admin/shops`);
+  revalidatePath(`/s/${shop.slug}`);
+  return { success: true };
+}
+
 export async function assignPlanAction(shopId: string, planId: string) {
   const adminId = await requireAdmin();
 
