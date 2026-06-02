@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist, Plus_Jakarta_Sans, Inter, EB_Garamond } from "next/font/google";
+import {
+  EB_Garamond,
+  Fraunces,
+  Geist,
+  Inter,
+  Plus_Jakarta_Sans,
+} from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
@@ -55,7 +61,8 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="hi"
+      suppressHydrationWarning
       className={`${fraunces.variable} ${geist.variable} ${jakarta.variable} ${inter.variable} ${ebGaramond.variable}`}
     >
       <body className="font-sans antialiased">
