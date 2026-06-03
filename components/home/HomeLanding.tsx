@@ -90,14 +90,14 @@ export function HomeLanding() {
               className="h-9 w-9 shrink-0 rounded-xl object-contain"
               priority
             />
-            <span className="truncate text-xl font-black tracking-tight text-blue-700 sm:text-2xl">
+            <span className="text-xl font-black tracking-tight text-blue-700 sm:text-2xl">
               DigiDukan
             </span>
           </Link>
 
           <div className="flex items-center gap-2">
             <div
-              className="flex items-center gap-0.5 rounded-xl border border-slate-200 bg-slate-50 p-1"
+              className="hidden sm:flex items-center gap-0.5 rounded-xl border border-slate-200 bg-slate-50 p-1"
               aria-label={copy.languageLabel}
             >
               {(["hi", "en"] as const).map((item) => (
@@ -105,11 +105,10 @@ export function HomeLanding() {
                   key={item}
                   type="button"
                   onClick={() => setLanguage(item)}
-                  className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
-                    language === item
-                      ? "bg-blue-600 text-white shadow-sm"
-                      : "text-slate-500 hover:text-slate-800"
-                  }`}
+                  className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${language === item
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-slate-500 hover:text-slate-800"
+                    }`}
                   aria-pressed={language === item}
                 >
                   {item === "hi" ? "हिंदी" : "EN"}
@@ -176,16 +175,16 @@ export function HomeLanding() {
             </p>
 
             {/* Stats — full width, no max-w constraint to prevent overflow */}
-            <div className="mt-9 grid w-full grid-cols-3 gap-3">
+            <div className="mt-9 grid w-full grid-cols-3 gap-2 sm:gap-3">
               {copy.stats.map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-sm"
+                  className="flex flex-col justify-center rounded-xl border border-white/10 bg-white/5 p-2 sm:p-3 backdrop-blur-sm"
                 >
-                  <div className="break-words text-base font-black text-white sm:text-lg">
+                  <div className="text-[13px] font-black tracking-tight text-white sm:text-lg">
                     {item.value}
                   </div>
-                  <div className="mt-1 text-[11px] leading-4 text-slate-400">
+                  <div className="mt-1 text-[10px] leading-tight text-slate-400 sm:text-[11px] sm:leading-4">
                     {item.label}
                   </div>
                 </div>
@@ -205,16 +204,16 @@ export function HomeLanding() {
             {copy.steps.map((step, index) => (
               <article
                 key={step.title}
-                className="group relative rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 transition-shadow hover:shadow-md"
+                className="group relative rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition-shadow hover:shadow-md"
               >
-                <div className="mb-2 text-xs font-bold uppercase tracking-widest text-blue-500">
+                <div className="mb-1.5 text-[10px] font-bold uppercase tracking-widest text-blue-500">
                   Step {String(index + 1).padStart(2, "0")}
                 </div>
-                <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-base font-black text-blue-600 ring-1 ring-blue-100">
+                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-sm font-black text-blue-600 ring-1 ring-blue-100">
                   {index + 1}
                 </div>
-                <h3 className="text-base font-bold text-slate-900">{step.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-500">{step.description}</p>
+                <h3 className="text-sm font-bold text-slate-900">{step.title}</h3>
+                <p className="mt-1 text-[13px] leading-5 text-slate-500">{step.description}</p>
                 {index < copy.steps.length - 1 && (
                   <ArrowRight className="absolute -right-2 top-8 hidden h-4 w-4 text-slate-300 lg:block" />
                 )}
@@ -238,32 +237,33 @@ export function HomeLanding() {
               return (
                 <article
                   key={title}
-                  className={`group rounded-2xl ring-1 transition-all ${
-                    isWide
-                      ? "bg-slate-50 p-6 ring-slate-100 hover:bg-blue-50 hover:ring-blue-100 sm:col-span-2 lg:col-span-2"
-                      : "bg-slate-50 p-6 ring-slate-100 hover:bg-blue-50 hover:ring-blue-100"
-                  }`}
+                  className={`group rounded-2xl ring-1 transition-all ${isWide
+                    ? "bg-slate-50 p-6 ring-slate-100 hover:bg-blue-50 hover:ring-blue-100 sm:col-span-2 lg:col-span-2"
+                    : "bg-slate-50 p-6 ring-slate-100 hover:bg-blue-50 hover:ring-blue-100"
+                    }`}
                 >
                   {isWide ? (
-                    /* Wide card — horizontal layout, same color as regular */
-                    <div className="flex items-start gap-5">
-                      <div className="mb-4 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm group-hover:bg-blue-700">
+                    /* Wide card — horizontal layout always */
+                    <div className="flex items-start gap-4 sm:gap-5">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm group-hover:bg-blue-700">
                         <Icon className="h-5 w-5" />
                       </div>
                       <div>
                         <h3 className="text-base font-bold text-slate-900">{title}</h3>
-                        <p className="mt-2 text-sm leading-6 text-slate-500">{description}</p>
+                        <p className="mt-1 text-sm leading-6 text-slate-500 sm:mt-2">{description}</p>
                       </div>
                     </div>
                   ) : (
-                    /* Regular card — vertical layout */
-                    <>
-                      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm group-hover:bg-blue-700">
+                    /* Regular card — horizontal on mobile, vertical on sm+ */
+                    <div className="flex flex-row items-start gap-4 sm:block">
+                      <div className="mb-0 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm group-hover:bg-blue-700 sm:mb-4">
                         <Icon className="h-5 w-5" />
                       </div>
-                      <h3 className="text-base font-bold text-slate-900">{title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-slate-500">{description}</p>
-                    </>
+                      <div>
+                        <h3 className="text-base font-bold text-slate-900">{title}</h3>
+                        <p className="mt-1 text-sm leading-6 text-slate-500 sm:mt-2">{description}</p>
+                      </div>
+                    </div>
                   )}
                 </article>
               );
@@ -337,11 +337,10 @@ export function HomeLanding() {
             {copy.plans.map((plan, index) => (
               <article
                 key={plan.name}
-                className={`relative overflow-hidden rounded-2xl p-7 ${
-                  index === 0
-                    ? "border border-white/10 bg-white/5 backdrop-blur-sm"
-                    : "border border-blue-400/30 bg-blue-500/10 backdrop-blur-sm"
-                }`}
+                className={`relative overflow-hidden rounded-2xl p-7 ${index === 0
+                  ? "border border-white/10 bg-white/5 backdrop-blur-sm"
+                  : "border border-blue-400/30 bg-blue-500/10 backdrop-blur-sm"
+                  }`}
               >
                 {index === 1 && (
                   <div className="absolute right-5 top-5 flex items-center gap-1 rounded-full bg-blue-400/20 px-3 py-1 text-xs font-bold text-blue-300">
@@ -351,9 +350,8 @@ export function HomeLanding() {
                 )}
                 <div className="flex items-start gap-4">
                   <div
-                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${
-                      index === 0 ? "bg-white/10" : "bg-blue-400/20"
-                    }`}
+                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${index === 0 ? "bg-white/10" : "bg-blue-400/20"
+                      }`}
                   >
                     <WalletCards
                       className={`h-6 w-6 ${index === 0 ? "text-slate-300" : "text-blue-300"}`}
@@ -378,11 +376,10 @@ export function HomeLanding() {
                 <div className="mt-6">
                   <Link
                     href="/signup"
-                    className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all ${
-                      index === 0
-                        ? "bg-white/10 text-white hover:bg-white/20"
-                        : "bg-blue-500 text-white shadow-lg shadow-blue-500/20 hover:bg-blue-400"
-                    }`}
+                    className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all ${index === 0
+                      ? "bg-white/10 text-white hover:bg-white/20"
+                      : "bg-blue-500 text-white shadow-lg shadow-blue-500/20 hover:bg-blue-400"
+                      }`}
                   >
                     Get started
                     <ArrowRight className="h-4 w-4" />
@@ -465,16 +462,14 @@ function SectionHeader({
   return (
     <div className={align === "center" ? "mx-auto max-w-2xl text-center" : ""}>
       <h2
-        className={`text-3xl font-black tracking-tight sm:text-4xl ${
-          inverse ? "text-white" : "text-slate-900"
-        }`}
+        className={`text-3xl font-black tracking-tight sm:text-4xl ${inverse ? "text-white" : "text-slate-900"
+          }`}
       >
         {title}
       </h2>
       <p
-        className={`mt-3 text-base leading-7 ${
-          inverse ? "text-slate-400" : "text-slate-500"
-        }`}
+        className={`mt-3 text-base leading-7 ${inverse ? "text-slate-400" : "text-slate-500"
+          }`}
       >
         {subtitle}
       </p>
@@ -523,7 +518,7 @@ function QRCodeSVG() {
   }
 
   // Fill data area with deterministic pseudo-random pattern
-  const DATA = [1,0,1,1,0,0,1,0,1,1,1,0,0,1,1,0,1,0,0,1,1,1,0,1,0,1,0,1,1,0,0,1,1,0,1,0,1,1,0,1,0,0,1];
+  const DATA = [1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1];
   let di = 0;
   for (let r = 0; r < N; r++) {
     for (let c = 0; c < N; c++) {
@@ -569,10 +564,10 @@ function HeroVisual({ copy }: { copy: (typeof homeCopy)[HomeLanguage]["visual"] 
       <div className="relative grid gap-3 sm:grid-cols-[1fr_1fr]">
         {/* QR card */}
         <div className="flex flex-col items-center justify-center gap-3">
-          <div className="overflow-hidden rounded-xl bg-white p-3 shadow-xl shadow-black/30">
+          <div className="overflow-hidden rounded-xl bg-white p-3 shadow-xl shadow-black/30 w-44 h-44">
             <QRCodeSVG />
           </div>
-          <div className="w-full rounded-xl bg-blue-500/20 px-2.5 py-2 text-center text-[10px] font-bold leading-tight text-blue-300">
+          <div className="w-44 rounded-xl bg-blue-500/20 px-2.5 py-2 text-center text-[10px] font-bold leading-tight text-blue-300">
             digidukan.in/s/raj-store
           </div>
         </div>
@@ -600,8 +595,8 @@ function HeroVisual({ copy }: { copy: (typeof homeCopy)[HomeLanguage]["visual"] 
               <PhoneItem title={copy.itemOne} price="₹120" />
               <PhoneItem title={copy.itemTwo} price="₹180" />
               <div className="flex items-center justify-between rounded-xl bg-blue-600 px-3 py-2.5 text-white">
-                <div>
-                  <div className="text-[9px] font-semibold text-blue-200">{copy.cart}</div>
+                <div className="flex flex-col items-start">
+                  <div className="text-[9px] font-semibold text-blue-200 pb-1">{copy.cart}</div>
                   <div className="text-xs font-black">{copy.order}</div>
                 </div>
                 <WhatsAppIcon className="h-4 w-4 text-blue-200" />
