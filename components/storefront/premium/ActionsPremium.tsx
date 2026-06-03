@@ -87,8 +87,10 @@ export function ActionsPremium({
     trackEvent(shopSlug, "SHARE_CLICK");
   };
 
+  const rawWaNumber = whatsappNumber?.replace(/\D/g, "") ?? "";
+  const waNumber = rawWaNumber.length === 10 ? "91" + rawWaNumber : rawWaNumber;
   const waHref = whatsappNumber
-    ? `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=Hi%2C%20I%20would%20like%20to%20enquire%20about%20your%20offerings`
+    ? `https://wa.me/${waNumber}?text=Hi%2C%20I%20would%20like%20to%20enquire%20about%20your%20offerings`
     : null;
 
   return (
