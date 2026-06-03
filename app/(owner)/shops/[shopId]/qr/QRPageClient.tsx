@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Palette, Download } from "lucide-react";
+import { QRStudio } from "@/components/owner/QRStudio";
 
 interface Props {
   shopId: string;
@@ -16,12 +17,54 @@ export function QRPageClient({ shopId, shopName, shopSlug: _shopSlug, qrUrl, tar
   const [currentQrUrl, setCurrentQrUrl] = useState(qrUrl);
   const [regenerating, setRegenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isStudioOpen, setIsStudioOpen] = useState(false);
 
   function downloadQR() {
     const link = document.createElement("a");
     link.href = currentQrUrl;
     link.download = `${shopName.replace(/\s+/g, "-").toLowerCase()}-qr.png`;
     link.click();
+  }
+
+  function downloadPoster() {
+    const style = document.createElement("style");
+    style.textContent = `
+      @media print {
+        body * { visibility: hidden !important; }
+        #qr-poster, #qr-poster * { visibility: visible !important; }
+        #qr-poster {
+          position: fixed !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          max-width: none !important;
+          margin: 0 !important;
+          padding: 20mm !important;
+          box-sizing: border-box !important;
+          border: none !important;
+          border-radius: 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          justify-content: center !important;
+          background: white !important;
+          transform: none !important;
+        }
+        #qr-poster img {
+          width: 180mm !important;
+          height: 180mm !important;
+          object-fit: contain !important;
+        }
+        #qr-poster p {
+          font-size: 18pt !important;
+          margin: 4mm 0 !important;
+        }
+        @page { size: A4 portrait; margin: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+    window.print();
+    document.head.removeChild(style);
   }
 
   async function handleRegenerate() {
@@ -43,6 +86,7 @@ export function QRPageClient({ shopId, shopName, shopSlug: _shopSlug, qrUrl, tar
   }
 
   return (
+    <>
     <div className="space-y-6">
       {!isPublished && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
@@ -86,16 +130,31 @@ export function QRPageClient({ shopId, shopName, shopSlug: _shopSlug, qrUrl, tar
             />
           </div>
           <p className="text-xs text-gray-400 mt-3">Powered by DigiDukan</p>
+          <p className="text-xs text-gray-400 mt-1">Created by Innovgeist</p>
         </div>
+        <button
+          onClick={downloadPoster}
+          className="mt-4 w-full flex items-center justify-center gap-2 border border-gray-300 text-gray-700 py-2.5 rounded-xl font-medium hover:bg-gray-50 transition-colors text-sm"
+        >
+          <Download className="w-4 h-4" />
+          Download Poster (PDF)
+        </button>
       </div>
 
       {/* Action buttons */}
       <div className="flex flex-col gap-3">
         <button
-          onClick={downloadQR}
-          className="w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition-colors"
+          onClick={() => setIsStudioOpen(true)}
+          className="w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
         >
-          ⬇ Download QR Code (PNG)
+          <Palette className="w-4 h-4" />
+          Open QR Studio (Print / Layout)
+        </button>
+        <button
+          onClick={downloadQR}
+          className="w-full border border-blue-200 text-blue-700 py-3 rounded-xl font-medium hover:bg-blue-50 transition-colors"
+        >
+          ⬇ Download Raw QR (PNG)
         </button>
 
         {error && (
@@ -116,5 +175,14 @@ export function QRPageClient({ shopId, shopName, shopSlug: _shopSlug, qrUrl, tar
         </p>
       </div>
     </div>
+
+      {isStudioOpen && (
+        <QRStudio
+          shopName={shopName}
+          qrUrl={currentQrUrl}
+          onClose={() => setIsStudioOpen(false)}
+        />
+      )}
+    </>
   );
 }
