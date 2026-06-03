@@ -25,6 +25,8 @@ export function generateWhatsAppMessage(
 }
 
 export function getWhatsAppUrl(whatsappNumber: string, message: string): string {
-  const cleanNumber = whatsappNumber.replace(/[^0-9]/g, "");
+  let cleanNumber = whatsappNumber.replace(/[^0-9]/g, "");
+  // Auto-prepend India country code if a bare 10-digit number is stored
+  if (cleanNumber.length === 10) cleanNumber = "91" + cleanNumber;
   return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
 }
