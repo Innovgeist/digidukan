@@ -42,8 +42,18 @@ const featureIcons: LucideIcon[] = [
 
 const audienceImages = ["/landing1.png", "/landing4.png", "/landing7.png"];
 
-// Bento layout: items 0, 3, 7 are col-span-2 (wide)
-const BENTO_WIDE = new Set([0, 3, 7]);
+// Bento layout for 12-column grid on large screens
+const bentoLayouts = [
+  "lg:col-span-7", // 0: Digital shop page
+  "lg:col-span-5", // 1: Product catalog
+  "lg:col-span-5", // 2: Categories and collections
+  "lg:col-span-7", // 3: QR code sharing
+  "lg:col-span-4", // 4: WhatsApp cart
+  "lg:col-span-4", // 5: Owner dashboard
+  "lg:col-span-4", // 6: Plans and limits
+  "lg:col-span-7", // 7: Basic analytics
+  "lg:col-span-5", // 8: Admin panel
+];
 
 function getStoredLanguage(): HomeLanguage {
   if (typeof window === "undefined") return defaultHomeLanguage;
@@ -206,14 +216,18 @@ export function HomeLanding() {
                 key={step.title}
                 className="group relative rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition-shadow hover:shadow-md"
               >
-                <div className="mb-1.5 text-[10px] font-bold uppercase tracking-widest text-blue-500">
-                  Step {String(index + 1).padStart(2, "0")}
+                <div className="flex flex-row items-start gap-4 sm:block">
+                  <div className="mb-0 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-sm font-black text-blue-600 ring-1 ring-blue-100 sm:mb-3">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <div className="mb-1.5 text-[10px] font-bold uppercase tracking-widest text-blue-500">
+                      Step {String(index + 1).padStart(2, "0")}
+                    </div>
+                    <h3 className="text-sm font-bold text-slate-900">{step.title}</h3>
+                    <p className="mt-1 text-[13px] leading-5 text-slate-500">{step.description}</p>
+                  </div>
                 </div>
-                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-sm font-black text-blue-600 ring-1 ring-blue-100">
-                  {index + 1}
-                </div>
-                <h3 className="text-sm font-bold text-slate-900">{step.title}</h3>
-                <p className="mt-1 text-[13px] leading-5 text-slate-500">{step.description}</p>
                 {index < copy.steps.length - 1 && (
                   <ArrowRight className="absolute -right-2 top-8 hidden h-4 w-4 text-slate-300 lg:block" />
                 )}
@@ -225,46 +239,85 @@ export function HomeLanding() {
 
       {/* ── FEATURES — BENTO ─────────────────────────────────────────── */}
       <section className="bg-white py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
           <SectionHeader
             title={copy.featuresTitle}
             subtitle={copy.featuresSubtitle}
           />
-          {/* Bento grid: items 0, 3, 7 are wide (col-span-2) */}
-          <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-12 lg:gap-6">
             {featureItems.map(({ Icon, title, description }, index) => {
-              const isWide = BENTO_WIDE.has(index);
+              const colSpan = bentoLayouts[index];
+              const isRowOne = index === 0 || index === 1;
+              const isRowFour = index === 7 || index === 8;
+              const isSpecialNarrow = index === 4 || index === 5 || index === 6;
+
+              let textWidth = "sm:w-[50%]";
+              let imgWidth = "sm:w-[60%]";
+              if (colSpan === "lg:col-span-7") {
+                textWidth = "sm:w-[45%] sm:pr-6";
+                imgWidth = "sm:w-[65%]";
+              } else if (colSpan === "lg:col-span-5") {
+                textWidth = "sm:w-[55%] sm:pr-4";
+                imgWidth = "sm:w-[55%]";
+              } else if (isSpecialNarrow) {
+                textWidth = "sm:w-[52%] sm:pr-4";
+                imgWidth = "sm:w-[50%]";
+              }
+
               return (
                 <article
                   key={title}
-                  className={`group rounded-2xl ring-1 transition-all ${isWide
-                    ? "bg-slate-50 p-6 ring-slate-100 hover:bg-blue-50 hover:ring-blue-100 sm:col-span-2 lg:col-span-2"
-                    : "bg-slate-50 p-6 ring-slate-100 hover:bg-blue-50 hover:ring-blue-100"
+                  className={`group relative overflow-hidden rounded-3xl ring-1 transition-all bg-white ring-slate-100 hover:ring-blue-200 sm:col-span-1 ${colSpan} min-h-[280px] ${isRowOne
+                      ? "sm:min-h-[320px]"
+                      : isSpecialNarrow
+                        ? "sm:min-h-[90px]"
+                        : isRowFour
+                          ? "sm:min-h-[150px]"
+                          : "sm:min-h-[200px]"
                     }`}
                 >
-                  {isWide ? (
-                    /* Wide card — horizontal layout always */
-                    <div className="flex items-start gap-4 sm:gap-5">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm group-hover:bg-blue-700">
-                        <Icon className="h-5 w-5" />
+                  {/* Background Image Container */}
+                  <div className="absolute right-0 top-0 bottom-0 w-full sm:w-[70%] z-0 overflow-hidden rounded-3xl sm:rounded-l-none">
+                    <Image
+                      src={`/features/card_${index + 1}.png`}
+                      alt={title}
+                      fill
+                      className={`object-cover transition-transform duration-700 ease-out ${isSpecialNarrow
+                          ? "sm:object-contain scale-110 group-hover:scale-125 sm:scale-[1.2] sm:group-hover:scale-[1.3] origin-right"
+                          : "group-hover:scale-105"
+                        } ${isRowFour ? "sm:translate-x-6" : ""} ${index === 0 ? "object-bottom sm:object-center" : "object-bottom sm:object-right"
+                        }`}
+                    />
+                    {/* Fade left edge into the white background (Desktop) */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[40%] bg-gradient-to-r from-white via-white/95 to-transparent hidden sm:block" />
+                  </div>
+
+                  {/* Content Container - Bottom aligned on mobile, centered on desktop */}
+                  <div className={`relative z-10 flex h-full flex-col justify-end sm:justify-center p-3 sm:p-6 ${isSpecialNarrow ? "sm:px-6 sm:py-2" : "sm:p-8"} ${textWidth}`}>
+                    {isRowOne ? (
+                      // Horizontal on mobile, Vertical on desktop for Row 1
+                      <div className="flex flex-row sm:flex-col items-start sm:items-stretch gap-2 sm:gap-4 mt-1 sm:mt-0 bg-white/80 sm:bg-transparent p-2 sm:p-0 rounded-xl sm:rounded-none backdrop-blur-md sm:backdrop-blur-none shadow-sm sm:shadow-none border border-white/50 sm:border-transparent">
+                        <div className="flex h-8 w-8 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg sm:rounded-2xl bg-blue-600 text-white shadow-sm group-hover:bg-blue-700">
+                          <Icon className="h-3.5 w-3.5 sm:h-6 sm:w-6" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-black text-slate-900 sm:text-2xl">{title}</h3>
+                          <p className="mt-0.5 sm:mt-2 text-xs leading-tight text-slate-600 sm:text-base sm:leading-6">{description}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-base font-bold text-slate-900">{title}</h3>
-                        <p className="mt-1 text-sm leading-6 text-slate-500 sm:mt-2">{description}</p>
+                    ) : (
+                      // Horizontal on both mobile and desktop
+                      <div className="flex flex-row items-start gap-2 sm:gap-4 mt-1 sm:mt-0 bg-white/80 sm:bg-transparent p-2 sm:p-0 rounded-xl sm:rounded-none backdrop-blur-md sm:backdrop-blur-none shadow-sm sm:shadow-none border border-white/50 sm:border-transparent">
+                        <div className={`flex h-8 w-8 sm:${isSpecialNarrow ? "h-10 w-10" : "h-12 w-12"} shrink-0 items-center justify-center rounded-lg sm:rounded-2xl bg-blue-600 text-white shadow-sm group-hover:bg-blue-700 sm:mt-0.5`}>
+                          <Icon className={`h-3.5 w-3.5 sm:${isSpecialNarrow ? "h-5 w-5" : "h-6 w-6"}`} />
+                        </div>
+                        <div>
+                          <h3 className={`${isSpecialNarrow ? "text-[13px] sm:text-base" : "text-sm sm:text-lg"} font-black text-slate-900`}>{title}</h3>
+                          <p className={`mt-0.5 sm:${isSpecialNarrow ? "mt-0.5 leading-snug" : "mt-1.5 leading-6"} text-xs sm:text-sm leading-tight sm:leading-snug text-slate-600`}>{description}</p>
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    /* Regular card — horizontal on mobile, vertical on sm+ */
-                    <div className="flex flex-row items-start gap-4 sm:block">
-                      <div className="mb-0 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm group-hover:bg-blue-700 sm:mb-4">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h3 className="text-base font-bold text-slate-900">{title}</h3>
-                        <p className="mt-1 text-sm leading-6 text-slate-500 sm:mt-2">{description}</p>
-                      </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </article>
               );
             })}
@@ -444,6 +497,20 @@ export function HomeLanding() {
           <p className="text-xs text-slate-400">© 2025 DigiDukan. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* ── FLOATING LANGUAGE TOGGLE (MOBILE ONLY) ──────────────────────── */}
+      <div className="fixed bottom-12 right-6 z-50 sm:hidden">
+        <button
+          type="button"
+          onClick={() => setLanguage(language === "en" ? "hi" : "en")}
+          className="flex items-center justify-center rounded-2xl border border-slate-200/60 bg-white/90 px-4 py-2.5 shadow-xl shadow-slate-200/50 backdrop-blur-md transition-all active:scale-95"
+          aria-label="Toggle language"
+        >
+          <span className="text-sm font-bold text-blue-600">
+            {language === "en" ? "हिंदी" : "EN"}
+          </span>
+        </button>
+      </div>
     </main>
   );
 }
